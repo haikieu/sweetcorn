@@ -29,7 +29,7 @@ class Canvas: NSView
         wantsLayer = true
         
         layer?.addSublayer(curvesLayer)
-        curvesLayer.strokeColor = NSColor.redColor().CGColor
+        curvesLayer.strokeColor = NSColor.lightGrayColor().CGColor
         curvesLayer.lineWidth = 2
         
         updateUI()

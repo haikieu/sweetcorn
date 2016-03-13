@@ -69,12 +69,12 @@ func == (lhs: InputIndex, rhs: InputIndex) -> Bool
 
 // -----
 
-let inputNodeType = SweetcornNodeType(name: "Input", inputLabels: [], outputLabels: ["R", "G", "B"])
-let outputNodeType = SweetcornNodeType(name: "Output", inputLabels: ["R", "G", "B"], outputLabels: [])
+let inputNodeType = SweetcornNodeType(name: "Input", inputLabels: [], outputLabels: ["Red", "Green", "Blue"])
+let outputNodeType = SweetcornNodeType(name: "Output", inputLabels: ["Red", "Green", "Blue"], outputLabels: [])
 
 let smoothstepNodeType = SweetcornNodeType(name: "Smoothstep",
     inputLabels: ["Edge 0: Red", "Edge 0: Green", "Edge 0: Blue", "Edge 1: Red", "Edge 1: Green", "Edge 1: Blue", "x"],
-    outputLabels: ["R", "G", "B"])
+    outputLabels: ["Red", "Green", "Blue"])
 
 
 struct SweetcornNodeType

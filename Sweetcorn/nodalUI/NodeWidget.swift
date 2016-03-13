@@ -15,7 +15,7 @@ class NodeWidget: NSView
     let canvas: Canvas
     let node: SweetcornNode
     
-    let titleLabel = NSTextField()
+    let titleLabel = NodeWidget.readonlyLabel()
     
     required init(canvas: Canvas, node: SweetcornNode)
     {
@@ -23,19 +23,12 @@ class NodeWidget: NSView
         self.node = node
         
         super.init(frame: CGRectZero)
-        
-        layer = CALayer()
-        layer?.backgroundColor = NSColor.redColor().CGColor
-        wantsLayer = true
-        
+
         titleLabel.stringValue = node.type.name
-        
-        titleLabel.editable = false
-        titleLabel.bezeled = false
-        titleLabel.bordered = false
-        
-        titleLabel.frame = CGRect(x: 0, y: NodeWidget.widgetHeightForNode(node), width: 100, height: rowHeight)
-        
+        titleLabel.font = NSFont.boldSystemFontOfSize(12)
+        titleLabel.alignment = .Center
+        titleLabel.backgroundColor = NSColor.darkGrayColor()
+        titleLabel.textColor = NSColor.whiteColor()
         addSubview(titleLabel)
        
         node.type.inputLabels.enumerate().forEach{
@@ -43,18 +36,22 @@ class NodeWidget: NSView
         
         node.type.outputLabels.enumerate().forEach{
             addLabelWidget($0, name: $1, widgetType: .Output)}
+        
+        titleLabel.frame = CGRect(x: 0, y: NodeWidget.widgetHeightForNode(node) - rowHeight, width: 100, height: rowHeight)
+        
+        
     }
     
     func addLabelWidget(index: Int, name: String, widgetType: LabelWidgetType)
     {
         let y = NodeWidget.verticalPositionForLabel(index, widgetType: widgetType, node:  node)
         
-        let label = NSTextField()
+        let label = NodeWidget.readonlyLabel()
         
         label.alignment = widgetType == .Input ? .Left : .Right
         
         label.frame = CGRect(x: 0, y: y, width: 100, height: rowHeight)
-        label.stringValue = name + "\(y)"
+        label.stringValue = name
         
         addSubview(label)
     }
@@ -78,18 +75,31 @@ class NodeWidget: NSView
         canvas.renderRelationships()
     }
     
+    class func readonlyLabel() -> NSTextField
+    {
+        let label = NSTextField()
+        
+        label.editable = false
+        label.bezeled = false
+        label.bordered = false
+        
+        label.backgroundColor = NSColor.lightGrayColor()
+        
+        return label
+    }
+    
     class func verticalPositionForLabel(index: Int, widgetType: LabelWidgetType, node: SweetcornNode) -> CGFloat
     {
         let verticalOffset = widgetType == .Input ?
             NodeWidget.widgetHeightForNode(node) - rowHeight :
             NodeWidget.widgetHeightForNode(node) - rowHeight - CGFloat(node.type.inputLabels.count) * rowHeight
         
-        return verticalOffset - (rowHeight * CGFloat(index))
+        return verticalOffset - (rowHeight * CGFloat(index)) - rowHeight
     }
     
     class func widgetHeightForNode(node: SweetcornNode) -> CGFloat
     {
-        return CGFloat((node.type.inputLabels.count + node.type.outputLabels.count) * 20)
+        return CGFloat((node.type.inputLabels.count + node.type.outputLabels.count) * 20) + rowHeight
     }
 }
 
