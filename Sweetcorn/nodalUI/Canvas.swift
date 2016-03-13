@@ -30,6 +30,7 @@ class Canvas: NSView
         
         layer?.addSublayer(curvesLayer)
         curvesLayer.strokeColor = NSColor.lightGrayColor().CGColor
+        curvesLayer.fillColor = nil
         curvesLayer.lineWidth = 2
         
         updateUI()
@@ -79,7 +80,12 @@ class Canvas: NSView
                 let targetY = NodeWidget.verticalPositionForLabel(input.0.targetIndex, widgetType: .Input, node: node)
              
                 CGPathMoveToPoint(path, nil, node.position.x, node.position.y + targetY + rowHeight / 2)
-                CGPathAddLineToPoint(path, nil, input.1.position.x + 100, input.1.position.y + sourceY + rowHeight / 2)
+                
+                let controlPointOne = CGPoint(x: input.1.position.x + 100, y: node.position.y + targetY + rowHeight / 2)
+                let controlPointTwo = CGPoint(x: node.position.x, y: input.1.position.y + sourceY + rowHeight / 2)
+                let endPoint = CGPoint(x: input.1.position.x + 100, y: input.1.position.y + sourceY + rowHeight / 2)
+                
+                CGPathAddCurveToPoint(path, nil, controlPointOne.x, controlPointOne.y, controlPointTwo.x, controlPointTwo.y, endPoint.x, endPoint.y)
             }
         }
         
