@@ -14,6 +14,7 @@
 		3E93D4631C90939B000C98DB /* NodeWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E93D4621C90939B000C98DB /* NodeWidget.swift */; };
 		3E93D4651C909B8E000C98DB /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E93D4641C909B8E000C98DB /* Canvas.swift */; };
 		3E93D4681C90AEF1000C98DB /* SweetcornModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E93D4671C90AEF1000C98DB /* SweetcornModel.swift */; };
+		3ED69DC11C962E0E00E544C9 /* monalisa.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3ED69DC01C962E0E00E544C9 /* monalisa.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		3E93D4621C90939B000C98DB /* NodeWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NodeWidget.swift; path = nodalUI/NodeWidget.swift; sourceTree = "<group>"; };
 		3E93D4641C909B8E000C98DB /* Canvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Canvas.swift; path = nodalUI/Canvas.swift; sourceTree = "<group>"; };
 		3E93D4671C90AEF1000C98DB /* SweetcornModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SweetcornModel.swift; path = sweetcorn/SweetcornModel.swift; sourceTree = "<group>"; };
+		3ED69DC01C962E0E00E544C9 /* monalisa.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = monalisa.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 		3E93D4511C8FE81B000C98DB /* Sweetcorn */ = {
 			isa = PBXGroup;
 			children = (
+				3ED69DC01C962E0E00E544C9 /* monalisa.jpg */,
 				3E93D4661C90AECA000C98DB /* sweetcorn */,
 				3E93D4611C90935C000C98DB /* nodalUI */,
 				3E93D4521C8FE81B000C98DB /* AppDelegate.swift */,
@@ -146,6 +149,7 @@
 			files = (
 				3E93D4571C8FE81B000C98DB /* Assets.xcassets in Resources */,
 				3E93D45A1C8FE81B000C98DB /* Main.storyboard in Resources */,
+				3ED69DC11C962E0E00E544C9 /* monalisa.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

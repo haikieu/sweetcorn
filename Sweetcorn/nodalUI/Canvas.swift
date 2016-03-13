@@ -97,7 +97,7 @@ class Canvas: NSView
         relationshipCreationLayer.path = path
     }
     
-    // Creates the relationship
+    // Creates the relationship. TODO - move logic to `SweetcornModel`
     override func mouseUp(theEvent: NSEvent)
     {
         guard let relationshipCreationSource = relationshipCreationSource,
@@ -113,7 +113,8 @@ class Canvas: NSView
             relationshipTarget.node.inputs[input.0] = nil
         }
         
-        let inputIndex = InputIndex(sourceIndex: relationshipCreationSource.index, targetIndex: relationshipTarget.index)
+        let inputIndex = InputIndex(sourceIndex: relationshipCreationSource.index,
+            targetIndex: relationshipTarget.index)
         
         relationshipTarget.node.inputs[inputIndex] = relationshipCreationSource.node
     
@@ -145,8 +146,12 @@ class Canvas: NSView
         {
             for input in node.inputs
             {
-                let sourceY = NodeWidget.verticalPositionForLabel(input.0.sourceIndex, widgetType: .Output, node: input.1)
-                let targetY = NodeWidget.verticalPositionForLabel(input.0.targetIndex, widgetType: .Input, node: node)
+                let sourceY = NodeWidget.verticalPositionForLabel(input.0.sourceIndex,
+                    widgetType: .Output,
+                    node: input.1)
+                let targetY = NodeWidget.verticalPositionForLabel(input.0.targetIndex,
+                    widgetType: .Input,
+                    node: node)
              
                 CGPathMoveToPoint(path, nil,
                     node.position.x, node.position.y + targetY + rowHeight / 2)
