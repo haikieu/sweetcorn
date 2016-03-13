@@ -15,7 +15,7 @@ class NodeWidget: NSView
     let canvas: Canvas
     let node: SweetcornNode
     
-    let titleLabel = NodeWidget.readonlyLabel()
+    let titleLabel = NSTextField()
     
     required init(canvas: Canvas, node: SweetcornNode)
     {
@@ -29,6 +29,10 @@ class NodeWidget: NSView
         titleLabel.alignment = .Center
         titleLabel.backgroundColor = NSColor.darkGrayColor()
         titleLabel.textColor = NSColor.whiteColor()
+        titleLabel.editable = false
+        titleLabel.bezeled = false
+        titleLabel.bordered = false
+        
         addSubview(titleLabel)
        
         node.type.inputLabels.enumerate().forEach{
@@ -46,14 +50,29 @@ class NodeWidget: NSView
     {
         let y = NodeWidget.verticalPositionForLabel(index, widgetType: widgetType, node:  node)
         
-        let label = NodeWidget.readonlyLabel()
+        let label = widgetType == .Input ?
+            ReadonlyLabel(index: index, node: node, canvas: canvas) :
+            OutputWidget(index: index, mouseDownCallback: mouseDownHandler, canvas: canvas)
         
         label.alignment = widgetType == .Input ? .Left : .Right
         
         label.frame = CGRect(x: 0, y: y, width: 100, height: rowHeight)
-        label.stringValue = name
+        
+        if let btn = label as? OutputWidget
+        {
+            btn.title = name
+        }
+        else
+        {
+            label.stringValue = name
+        }
         
         addSubview(label)
+    }
+    
+    func mouseDownHandler(index: Int) -> Void
+    {
+        canvas.relationshipCreationSource = (node: node, index: index)
     }
     
     override var intrinsicContentSize: CGSize
@@ -75,19 +94,6 @@ class NodeWidget: NSView
         canvas.renderRelationships()
     }
     
-    class func readonlyLabel() -> NSTextField
-    {
-        let label = NSTextField()
-        
-        label.editable = false
-        label.bezeled = false
-        label.bordered = false
-        
-        label.backgroundColor = NSColor.lightGrayColor()
-        
-        return label
-    }
-    
     class func verticalPositionForLabel(index: Int, widgetType: LabelWidgetType, node: SweetcornNode) -> CGFloat
     {
         let verticalOffset = widgetType == .Input ?
@@ -101,6 +107,108 @@ class NodeWidget: NSView
     {
         return CGFloat((node.type.inputLabels.count + node.type.outputLabels.count) * 20) + rowHeight
     }
+}
+
+// MARK: Readonly label with mouse over
+
+class ReadonlyLabel: NSTextField
+{
+    let index: Int
+    unowned let node: SweetcornNode
+    unowned let canvas: Canvas
+    
+    init(index: Int, node: SweetcornNode, canvas: Canvas)
+    {
+        self.index = index
+        self.node = node
+        self.canvas = canvas
+        
+        super.init(frame: CGRectZero)
+        
+        editable = false
+        bezeled = false
+        bordered = false
+        
+        backgroundColor = NSColor.lightGrayColor()
+    
+    }
+
+    override var frame: CGRect
+    {
+        didSet
+        {
+            let trackingArea = NSTrackingArea(rect: bounds,
+                options: [NSTrackingAreaOptions.MouseEnteredAndExited,
+                    NSTrackingAreaOptions.ActiveAlways,
+                    NSTrackingAreaOptions.EnabledDuringMouseDrag],
+                owner: self,
+                userInfo: nil)
+            
+            addTrackingArea(trackingArea)
+        }
+    }
+    
+    override func mouseEntered(theEvent: NSEvent)
+    {
+        if canvas.relationshipCreationSource == nil
+        {
+            return
+        }
+        
+        backgroundColor = NSColor.magentaColor()
+        textColor = NSColor.whiteColor()
+        
+        canvas.relationshipTarget = (index: index, node: node)
+    }
+    
+    override func mouseExited(theEvent: NSEvent)
+    {
+        backgroundColor = NSColor.lightGrayColor()
+        textColor = NSColor.blackColor()
+        
+        canvas.relationshipTarget = nil
+    }
+    
+    required init?(coder: NSCoder)
+    {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: Output widget to begin relationship creation
+
+class OutputWidget: NSButton
+{
+    let index: Int
+    let mouseDownCallback: (index: Int) -> Void
+    unowned let canvas: Canvas
+    
+    init(index: Int, mouseDownCallback: (index: Int) -> Void, canvas: Canvas)
+    {
+        self.index = index
+        self.mouseDownCallback = mouseDownCallback
+        self.canvas = canvas
+        
+        super.init(frame: CGRectZero)
+    }
+
+    required init?(coder: NSCoder)
+    {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func mouseDown(theEvent: NSEvent)
+    {
+        mouseDownCallback(index: index)
+        
+        canvas.mouseDown(theEvent)
+    }
+    
+    override func mouseDragged(theEvent: NSEvent)
+    {
+        canvas.mouseDragged(theEvent)
+    }
+
 }
 
 enum LabelWidgetType

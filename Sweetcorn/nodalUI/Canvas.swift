@@ -11,6 +11,7 @@ import Cocoa
 class Canvas: NSView
 {
     let curvesLayer = CAShapeLayer()
+    let relationshipCreationLayer = CAShapeLayer()
     
     required init(model: SweetcornModel, frame frameRect: NSRect)
     {
@@ -33,6 +34,12 @@ class Canvas: NSView
         curvesLayer.fillColor = nil
         curvesLayer.lineWidth = 2
         
+        layer?.addSublayer(relationshipCreationLayer)
+        relationshipCreationLayer.strokeColor = NSColor.magentaColor().CGColor
+        relationshipCreationLayer.lineDashPattern = [5,5]
+        relationshipCreationLayer.fillColor = nil
+        relationshipCreationLayer.lineWidth = 2
+        
         updateUI()
     }
 
@@ -42,25 +49,87 @@ class Canvas: NSView
     }
     
     private var model: SweetcornModel
+    
+    var relationshipCreationSource: (node: SweetcornNode, index: Int)?
     {
         didSet
         {
-            Swift.print("hola")
+            if relationshipCreationSource == nil
+            {
+                relationshipCreationLayer.path = nil
+            }
         }
     }
     
-    override func mouseDown(theEvent: NSEvent)
+    var relationshipTarget: (node: SweetcornNode, index: Int)?
+    
+    override func mouseDragged(theEvent: NSEvent)
     {
-        Swift.print(theEvent.modifierFlags.contains(NSEventModifierFlags.CommandKeyMask) )
+        guard let relationshipCreationSource = relationshipCreationSource else
+        {
+            return
+        }
+        
+        let mouseLocation = convertPoint(theEvent.locationInWindow, fromView: nil)
+        
+        
+        let path = CGPathCreateMutable()
+        let sourceNode = relationshipCreationSource.node
+        let sourceIndex = relationshipCreationSource.index
+        
+        let sourceY = NodeWidget.verticalPositionForLabel(sourceIndex, widgetType: .Output, node: sourceNode)
+        
+        CGPathMoveToPoint(path, nil,
+            mouseLocation.x, mouseLocation.y)
+        
+        let controlPointOne = CGPoint(x: sourceNode.position.x + 100,
+            y: mouseLocation.y)
+        let controlPointTwo = CGPoint(x: mouseLocation.x,
+            y: sourceNode.position.y + sourceY + rowHeight / 2)
+        let endPoint = CGPoint(x: sourceNode.position.x + 100,
+            y: sourceNode.position.y + sourceY + rowHeight / 2)
+        
+        CGPathAddCurveToPoint(path, nil,
+            controlPointOne.x, controlPointOne.y,
+            controlPointTwo.x, controlPointTwo.y,
+            endPoint.x, endPoint.y)
+        
+        relationshipCreationLayer.path = path
     }
     
+    // Creates the relationship
+    override func mouseUp(theEvent: NSEvent)
+    {
+        guard let relationshipCreationSource = relationshipCreationSource,
+            relationshipTarget = relationshipTarget else
+        {
+            self.relationshipCreationSource = nil
+            self.relationshipTarget = nil
+            return
+        }
+        
+        for input in relationshipTarget.node.inputs where input.0.targetIndex == relationshipTarget.index
+        {
+            relationshipTarget.node.inputs[input.0] = nil
+        }
+        
+        let inputIndex = InputIndex(sourceIndex: relationshipCreationSource.index, targetIndex: relationshipTarget.index)
+        
+        relationshipTarget.node.inputs[inputIndex] = relationshipCreationSource.node
+    
+        renderRelationships()
+        
+        self.relationshipCreationSource = nil
+    }
+
     func updateUI()
     {
         for node in model.nodes
         {
             let nodeWidget = NodeWidget(canvas: self, node: node)
             
-            nodeWidget.frame = CGRect(origin: node.position, size: nodeWidget.intrinsicContentSize)
+            nodeWidget.frame = CGRect(origin: node.position,
+                size: nodeWidget.intrinsicContentSize)
             
             addSubview(nodeWidget)
         }
@@ -79,13 +148,20 @@ class Canvas: NSView
                 let sourceY = NodeWidget.verticalPositionForLabel(input.0.sourceIndex, widgetType: .Output, node: input.1)
                 let targetY = NodeWidget.verticalPositionForLabel(input.0.targetIndex, widgetType: .Input, node: node)
              
-                CGPathMoveToPoint(path, nil, node.position.x, node.position.y + targetY + rowHeight / 2)
+                CGPathMoveToPoint(path, nil,
+                    node.position.x, node.position.y + targetY + rowHeight / 2)
                 
-                let controlPointOne = CGPoint(x: input.1.position.x + 100, y: node.position.y + targetY + rowHeight / 2)
-                let controlPointTwo = CGPoint(x: node.position.x, y: input.1.position.y + sourceY + rowHeight / 2)
-                let endPoint = CGPoint(x: input.1.position.x + 100, y: input.1.position.y + sourceY + rowHeight / 2)
+                let controlPointOne = CGPoint(x: input.1.position.x + 100,
+                    y: node.position.y + targetY + rowHeight / 2)
+                let controlPointTwo = CGPoint(x: node.position.x,
+                    y: input.1.position.y + sourceY + rowHeight / 2)
+                let endPoint = CGPoint(x: input.1.position.x + 100,
+                    y: input.1.position.y + sourceY + rowHeight / 2)
                 
-                CGPathAddCurveToPoint(path, nil, controlPointOne.x, controlPointOne.y, controlPointTwo.x, controlPointTwo.y, endPoint.x, endPoint.y)
+                CGPathAddCurveToPoint(path, nil,
+                    controlPointOne.x, controlPointOne.y,
+                    controlPointTwo.x, controlPointTwo.y,
+                    endPoint.x, endPoint.y)
             }
         }
         
