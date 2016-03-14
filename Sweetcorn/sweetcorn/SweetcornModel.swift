@@ -17,6 +17,9 @@ class SweetcornNode
     var position: CGPoint
     var inputs: [InputIndex: SweetcornNode]
     
+    // For when type is numeric
+    var floatValue: Float = 0.0
+    
     init(type: SweetcornNodeType, position: CGPoint, inputs: [InputIndex: SweetcornNode] = [:])
     {
         self.type = type
@@ -43,7 +46,8 @@ class SweetcornModel
         stepNodeType,
         lumaCoefficientsNodeType,
         dotNodeType,
-        mixNodeType, 
+        mixNodeType,
+        numericNodeType, 
         squareRootNodeType].sort({$0.name < $1.name})
     
     init()
@@ -99,6 +103,12 @@ class SweetcornModel
         if let varNameRange = glslString.rangeOfString("$VAR_NAME")
         {
            glslString.replaceRange(varNameRange, with: node_id(node))
+        }
+        
+        if node.type.name == "Float"
+        {
+            glslString.replaceRange(glslString.rangeOfString("$0")!,
+                with: "\(node.floatValue)")
         }
         
         for i in 0 ..< inputs.count

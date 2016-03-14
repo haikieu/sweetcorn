@@ -8,7 +8,7 @@
 
 import Foundation
 
-// ----
+// Special Types (TODO move names to constants :)
 
 let inputNodeType = SweetcornNodeType(name: "Input",
     inputLabels: [],
@@ -19,6 +19,11 @@ let outputNodeType = SweetcornNodeType(name: "Output",
     inputLabels: ["Red", "Green", "Blue"],
     outputLabels: [],
     glslString: "  return vec4($0, $1, $2, 1.0); \n")
+
+let numericNodeType = SweetcornNodeType(name: "Float",
+    inputLabels: [],
+    outputLabels: ["x"],
+    glslString: "  float $VAR_NAME = $0 ; \n")
 
 // -----
 

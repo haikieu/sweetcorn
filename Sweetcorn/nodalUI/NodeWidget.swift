@@ -26,6 +26,11 @@ class NodeWidget: NSView
 
         titleLabel.stringValue = node.type.name
         
+        if node.type.name == "Input" || node.type.name == "Output"
+        {
+            titleLabel.backgroundColor = NSColor.blueColor()
+        }
+        
         addSubview(titleLabel)
        
         node.type.inputLabels.enumerate().forEach{
@@ -34,9 +39,23 @@ class NodeWidget: NSView
         node.type.outputLabels.enumerate().forEach{
             addLabelWidget($0, name: $1, widgetType: .Output)}
         
-        titleLabel.frame = CGRect(x: 0, y: NodeWidget.widgetHeightForNode(node) - rowHeight, width: 100, height: rowHeight)
+        titleLabel.frame = CGRect(x: 0, y: NodeWidget.widgetHeightForNode(node) - rowHeight,
+            width: 100,
+            height: rowHeight)
         
-        
+        if node.type.name == "Float"
+        {
+            let numericInput = NumberEditor(node: node, model: canvas.model)
+            
+            numericInput.frame = CGRect(x: 0,
+                y: NodeWidget.widgetHeightForNode(node) - rowHeight - rowHeight,
+                width: 100,
+                height: rowHeight)
+            
+            numericInput.floatValue = 0.0
+            
+            addSubview(numericInput)
+        }
     }
     
     func addLabelWidget(index: Int, name: String, widgetType: LabelWidgetType)
@@ -93,13 +112,49 @@ class NodeWidget: NSView
             NodeWidget.widgetHeightForNode(node) - rowHeight :
             NodeWidget.widgetHeightForNode(node) - rowHeight - CGFloat(node.type.inputLabels.count) * rowHeight
         
-        return verticalOffset - (rowHeight * CGFloat(index)) - rowHeight
+        return verticalOffset - (rowHeight * CGFloat(index)) - rowHeight - (node.type.name == "Float" ? 20 : 0)
     }
     
     class func widgetHeightForNode(node: SweetcornNode) -> CGFloat
     {
-        return CGFloat((node.type.inputLabels.count + node.type.outputLabels.count) * 20) + rowHeight
+        return CGFloat((node.type.inputLabels.count + node.type.outputLabels.count) * 20) + rowHeight + (node.type.name == "Float" ? 20 : 0)
     }
+}
+
+class NumberEditor: NSTextField
+{
+    let node: SweetcornNode
+    let model: SweetcornModel
+    
+    required init(node: SweetcornNode, model: SweetcornModel)
+    {
+        self.node = node
+        self.model = model
+        
+        super.init(frame: CGRectZero)
+    }
+
+    required init?(coder: NSCoder)
+    {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func textDidChange(notification: NSNotification)
+    {
+        node.floatValue = floatValue
+        
+        model.updateGLSL()
+    }
+    
+    override func textDidEndEditing(notification: NSNotification)
+    {
+        stringValue = "\(floatValue)"
+        
+        node.floatValue = floatValue
+        
+        model.updateGLSL()
+    }
+
 }
 
 // MARK: Readonly label with mouse over

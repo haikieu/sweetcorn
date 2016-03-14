@@ -13,7 +13,7 @@ class Canvas: NSView
     let curvesLayer = CAShapeLayer()
     let relationshipCreationLayer = CAShapeLayer()
     
-    private var model: SweetcornModel
+    let model: SweetcornModel
     
     let draggingWidget = TitleLabel()
     

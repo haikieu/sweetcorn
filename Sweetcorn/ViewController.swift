@@ -57,7 +57,7 @@ class ViewController: NSViewController, NSWindowDelegate, FilteringDelegate
         view.window?.setContentSize(NSSize(width: 1024, height: 768))
         view.window?.showsResizeIndicator = false
         view.window?.center()
-        view.window?.title = "OS X Metal Particles"
+        view.window?.title = "Sweetcorn: Node Based Kernel Creation"
         
         view.window?.delegate = self
         
