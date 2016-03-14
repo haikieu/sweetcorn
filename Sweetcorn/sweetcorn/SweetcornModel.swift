@@ -40,6 +40,10 @@ class SweetcornModel
         divideNodeType,
         multiplyNodeType,
         destCoordType,
+        stepNodeType,
+        lumaCoefficientsNodeType,
+        dotNodeType,
+        mixNodeType, 
         squareRootNodeType].sort({$0.name < $1.name})
     
     init()

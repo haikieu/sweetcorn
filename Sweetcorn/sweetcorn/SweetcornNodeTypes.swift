@@ -49,7 +49,29 @@ let smoothstepNodeType = SweetcornNodeType(name: "Smoothstep",
     outputLabels: ["Red", "Green", "Blue"],
     glslString: "  vec3 $VAR_NAME = smoothstep(vec3($0, $1, $2), vec3($3, $4, $5), vec3($6, $7, $8)); \n")
 
+let stepNodeType = SweetcornNodeType(name: "Step",
+    inputLabels: ["Edge: Red", "Edge: Green", "Edge: Blue", "Value (x)", "Value (y)", "Value (z)"],
+    outputLabels: ["Red", "Green", "Blue"],
+    glslString: "  vec3 $VAR_NAME = step(vec3($0, $1, $2), vec3($3, $4, $5)); \n")
 
+let mixNodeType = SweetcornNodeType(name: "Mix",
+    inputLabels: ["X: Red", "X: Green", "X: Blue", "Y: Red", "Y: Green", "Y: Blue", "A: Red", "A: Green", "A: Blue"],
+    outputLabels: ["Red", "Green", "Blue"],
+    glslString: "  vec3 $VAR_NAME = mix(vec3($0, $1, $2), vec3($3, $4, $5), vec3($6, $7, $8)); \n")
+
+let dotNodeType = SweetcornNodeType(name: "Dot Product",
+    inputLabels: ["X: Red", "X: Green", "X: Blue", "Y: Red", "Y: Green", "Y: Blue"],
+    outputLabels: ["dot(x, y)"],
+    glslString: "  float $VAR_NAME = dot(vec3($0, $1, $2), vec3($3, $4, $5)); \n")
+
+// -----
+
+let lumaCoefficientsNodeType = SweetcornNodeType(name: "Luma Coef",
+    inputLabels: [],
+    outputLabels: ["Red", "Green", "Blue"],
+    glslString: "  vec3 $VAR_NAME = vec3(0.2126, 0.7152, 0.0722); \n")
+
+// -----
 
 let squareRootNodeType = SweetcornNodeType(name: "Square Root",
     inputLabels: ["x"],
