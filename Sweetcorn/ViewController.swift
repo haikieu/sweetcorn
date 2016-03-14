@@ -20,6 +20,7 @@ class ViewController: NSViewController, NSWindowDelegate, FilteringDelegate
     
     let imageView = NSImageView()
     let codeView = NSTextField()
+    let nodeTypesList = NodeTypesList()
     
     override func viewDidLoad()
     {
@@ -36,10 +37,11 @@ class ViewController: NSViewController, NSWindowDelegate, FilteringDelegate
         
         codeView.font = NSFont.monospacedDigitSystemFontOfSize(10, weight: NSFontWeightMedium)
         codeView.editable = false
-        codeView.backgroundColor = NSColor(calibratedRed: 1, green: 1, blue: 1, alpha: 0.95)
+        codeView.backgroundColor = NSColor(calibratedRed: 1, green: 1, blue: 1, alpha: 0.5)
         
         view.addSubview(imageView)
         view.addSubview(codeView)
+        view.addSubview(nodeTypesList)
         
         let tiffData = monalisa.TIFFRepresentation!
         let bitmap = NSBitmapImageRep(data: tiffData)
@@ -51,9 +53,15 @@ class ViewController: NSViewController, NSWindowDelegate, FilteringDelegate
     
     override func viewWillAppear()
     {
+        // view.window?.styleMask =  NSClosableWindowMask | NSTitledWindowMask | NSMiniaturizableWindowMask
+        view.window?.setContentSize(NSSize(width: 1024, height: 768))
+        view.window?.showsResizeIndicator = false
+        view.window?.center()
+        view.window?.title = "OS X Metal Particles"
+        
         view.window?.delegate = self
         
-        scrollView.frame = view.frame
+        resizeUI(toSize: view.frame.size)
     }
     
     func glslDidUpdate(glslString: String)
@@ -75,7 +83,19 @@ class ViewController: NSViewController, NSWindowDelegate, FilteringDelegate
     
     func windowWillResize(sender: NSWindow, toSize frameSize: NSSize) -> NSSize
     {
-        scrollView.frame = CGRect(origin: CGPointZero, size: frameSize)
+        resizeUI(toSize: frameSize)
+        
+        return frameSize
+    }
+    
+    func resizeUI(toSize frameSize: NSSize)
+    {
+        let tableViewWidth: CGFloat = 100
+        
+        scrollView.frame = CGRect(x: tableViewWidth,
+            y: 0,
+            width: frameSize.width - tableViewWidth - frameSize.height * 0.5,
+            height: frameSize.height)
         
         imageView.frame = CGRect(x: frameSize.width - frameSize.height * 0.5,
             y: frameSize.height - frameSize.height * 0.5,
@@ -87,8 +107,10 @@ class ViewController: NSViewController, NSWindowDelegate, FilteringDelegate
             width: frameSize.height * 0.5,
             height: frameSize.height * 0.5)
         
-        return frameSize
+        nodeTypesList.frame = CGRect(x: 0,
+            y: 0,
+            width: tableViewWidth,
+            height: frameSize.height)
     }
-    
     
 }

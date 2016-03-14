@@ -13,11 +13,17 @@ class Canvas: NSView
     let curvesLayer = CAShapeLayer()
     let relationshipCreationLayer = CAShapeLayer()
     
+    private var model: SweetcornModel
+    
+    let draggingWidget = TitleLabel()
+    
     required init(model: SweetcornModel, frame frameRect: NSRect)
     {
         self.model = model
         
         super.init(frame: frameRect)
+        
+        registerForDraggedTypes(["DraggingSweetcornNodeType"])
         
         let checkerboard = CIFilter(name: "CICheckerboardGenerator",
             withInputParameters: [
@@ -47,8 +53,6 @@ class Canvas: NSView
     {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    private var model: SweetcornModel
     
     var relationshipCreationSource: (node: SweetcornNode, index: Int)?
     {
@@ -175,3 +179,42 @@ class Canvas: NSView
         curvesLayer.path = path
     }
 }
+
+extension Canvas // Dropping support
+{
+    override func draggingEntered(sender: NSDraggingInfo) -> NSDragOperation
+    {
+        let draggingLocation = NSPoint(x: convertPoint(sender.draggingLocation(), fromView: nil).x - 50,
+            y: convertPoint(sender.draggingLocation(), fromView: nil).y - 10)
+        
+        addSubview(draggingWidget)
+        draggingWidget.hidden = false
+        draggingWidget.stringValue = "Xyzzy"
+        draggingWidget.frame = CGRect(origin: draggingLocation,
+            size: CGSize(width: 100, height: 20))
+        
+        return NSDragOperation.Generic
+    }
+    
+    override func draggingUpdated(sender: NSDraggingInfo) -> NSDragOperation
+    {
+        let draggingLocation = NSPoint(x: convertPoint(sender.draggingLocation(), fromView: nil).x - 50,
+            y: convertPoint(sender.draggingLocation(), fromView: nil).y - 10)
+        
+        draggingWidget.frame = CGRect(origin: draggingLocation,
+            size: CGSize(width: 100, height: 20))
+        
+        return NSDragOperation.Generic
+    }
+    
+    override func performDragOperation(sender: NSDraggingInfo) -> Bool
+    {
+        draggingWidget.hidden = true
+
+        return true
+    }
+}
+
+
+
+

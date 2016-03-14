@@ -15,7 +15,7 @@ class NodeWidget: NSView
     let canvas: Canvas
     let node: SweetcornNode
     
-    let titleLabel = NSTextField()
+    let titleLabel = TitleLabel()
     
     required init(canvas: Canvas, node: SweetcornNode)
     {
@@ -25,13 +25,6 @@ class NodeWidget: NSView
         super.init(frame: CGRectZero)
 
         titleLabel.stringValue = node.type.name
-        titleLabel.font = NSFont.boldSystemFontOfSize(12)
-        titleLabel.alignment = .Center
-        titleLabel.backgroundColor = NSColor.darkGrayColor()
-        titleLabel.textColor = NSColor.whiteColor()
-        titleLabel.editable = false
-        titleLabel.bezeled = false
-        titleLabel.bordered = false
         
         addSubview(titleLabel)
        
@@ -169,6 +162,29 @@ class ReadonlyLabel: NSTextField
         canvas.relationshipTarget = nil
     }
     
+    required init?(coder: NSCoder)
+    {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: Readonly Title label
+
+class TitleLabel: NSTextField
+{
+    override init(frame frameRect: NSRect)
+    {
+        super.init(frame: frameRect)
+        
+        font = NSFont.boldSystemFontOfSize(12)
+        alignment = .Center
+        backgroundColor = NSColor.darkGrayColor()
+        textColor = NSColor.whiteColor()
+        editable = false
+        bezeled = false
+        bordered = false
+    }
+
     required init?(coder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented")
