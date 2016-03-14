@@ -121,6 +121,8 @@ class Canvas: NSView
         renderRelationships()
         
         self.relationshipCreationSource = nil
+        
+        model.updateGLSL()
     }
 
     func updateUI()
