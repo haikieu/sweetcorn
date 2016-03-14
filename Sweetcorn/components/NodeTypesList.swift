@@ -13,9 +13,13 @@ class NodeTypesList: NSScrollView
 {
     let tableView = TableViewNoDragImage()
     
-    override init(frame frameRect: NSRect)
+    let model: SweetcornModel
+    
+    required init(model: SweetcornModel)
     {
-        super.init(frame: frameRect)
+        self.model = model
+        
+        super.init(frame: CGRectZero)
 
         let column = NSTableColumn(identifier: "")
         tableView.addTableColumn(column)
@@ -50,7 +54,7 @@ extension NodeTypesList: NSTableViewDataSource, NSTableViewDelegate
     {
         pboard.addTypes(["DraggingSweetcornNodeType"], owner: self)
         
-        Swift.print("dragging row indexs", rowIndexes)
+        model.draggingNodeTypeName = model.nodeTypes[rowIndexes.firstIndex].name
         
         return true
     }
@@ -62,11 +66,11 @@ extension NodeTypesList: NSTableViewDataSource, NSTableViewDelegate
     
     func numberOfRowsInTableView(tableView: NSTableView) -> Int
     {
-        return 100
+        return model.nodeTypes.count
     }
     
     func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject?
     {
-        return "Hello \(row)"
+        return model.nodeTypes[row].name
     }
 }

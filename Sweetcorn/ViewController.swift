@@ -20,7 +20,7 @@ class ViewController: NSViewController, NSWindowDelegate, FilteringDelegate
     
     let imageView = NSImageView()
     let codeView = NSTextField()
-    let nodeTypesList = NodeTypesList()
+    let nodeTypesList = NodeTypesList(model: model)
     
     override func viewDidLoad()
     {

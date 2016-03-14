@@ -189,7 +189,7 @@ extension Canvas // Dropping support
         
         addSubview(draggingWidget)
         draggingWidget.hidden = false
-        draggingWidget.stringValue = "Xyzzy"
+        draggingWidget.stringValue = model.draggingNodeTypeName ?? ""
         draggingWidget.frame = CGRect(origin: draggingLocation,
             size: CGSize(width: 100, height: 20))
         
@@ -207,10 +207,32 @@ extension Canvas // Dropping support
         return NSDragOperation.Generic
     }
     
+    // Creates new node after drop
+    // TODO - move logic to model
     override func performDragOperation(sender: NSDraggingInfo) -> Bool
     {
         draggingWidget.hidden = true
 
+        if let draggingNodeTypeName = model.draggingNodeTypeName,
+            nodeType = model.nodeTypeForName(draggingNodeTypeName)
+        {
+            let node = SweetcornNode(type: nodeType, position: CGPointZero)
+            
+            let draggingLocation = NSPoint(x: convertPoint(sender.draggingLocation(), fromView: nil).x - 50,
+                y: convertPoint(sender.draggingLocation(), fromView: nil).y + 10 - NodeWidget.widgetHeightForNode(node))
+            
+            node.position = draggingLocation
+            
+            model.nodes.append(node)
+            
+            let nodeWidget = NodeWidget(canvas: self, node: node)
+            
+            nodeWidget.frame = CGRect(origin: node.position,
+                size: nodeWidget.intrinsicContentSize)
+            
+            addSubview(nodeWidget)
+        }
+        
         return true
     }
 }

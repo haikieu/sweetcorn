@@ -31,23 +31,21 @@ class SweetcornModel
     weak var filteringDelegate: FilteringDelegate?
     
     var nodes: [SweetcornNode]
+    var glslLines = [String]()
+    var draggingNodeTypeName: String?
+    
+    let nodeTypes = [smoothstepNodeType,
+        addNodeType,
+        subtractNodeType,
+        divideNodeType,
+        multiplyNodeType,
+        destCoordType,
+        squareRootNodeType].sort({$0.name < $1.name})
     
     init()
     {
         let inputNode = SweetcornNode(type: inputNodeType, position: CGPoint(x: 20, y: 400))
-        
-        let multiplyNode = SweetcornNode(type: multiplyNodeType,
-            position: CGPoint(x: 200, y: 300))
-        
-//        let divideNode = SweetcornNode(type: divideNodeType,
-//            position: CGPoint(x: 200, y: 50),
-//            inputs: [
-//                InputIndex(sourceIndex: 1, targetIndex: 0): inputNode,
-//                InputIndex(sourceIndex: 2, targetIndex: 1): inputNode])
-        
-        let squareRootNode = SweetcornNode(type: squareRootNodeType, position: CGPoint(x: 200, y: 50))
-        let destCoordNode = SweetcornNode(type: destCoordType, position: CGPoint(x: 250, y: 50))
-        
+
         let inputs = [
             InputIndex(sourceIndex: 0, targetIndex: 0): inputNode,
             InputIndex(sourceIndex: 1, targetIndex: 1): inputNode,
@@ -55,24 +53,22 @@ class SweetcornModel
         ]
         
         let outputNode = SweetcornNode(type: outputNodeType, position: CGPoint(x: 380, y: 300), inputs: inputs)
-        
-        // let abcd = SweetcornNode(type: smoothstepNodeType, position: CGPoint(x: 380, y: 400), inputs: [InputIndex(sourceIndex: 0, targetIndex: 6): inputNode])
-        
-        
-        
-        nodes = [inputNode, outputNode, multiplyNode, squareRootNode, destCoordNode]
+     
+        nodes = [inputNode, outputNode] //, multiplyNode, squareRootNode, destCoordNode]
         
         updateGLSL()
     }
     
+    func nodeTypeForName(name: String) -> SweetcornNodeType?
+    {
+        return nodeTypes.filter({$0.name == name}).first
+    }
+    
     func node_id(node: SweetcornNode) -> String
     {
-        if node.type.name == "Input"
-        {
-            return "pixel"
-        }
-        
-        return "var_\(nodes.indexOf({$0 === node})!)"
+        return node.type.name == "Input" ?
+            "pixel" :
+            "var_\(nodes.indexOf({$0 === node})!)"
     }
     
     func updateGLSL()
@@ -89,8 +85,6 @@ class SweetcornModel
      
         filteringDelegate?.glslDidUpdate(glslString)
     }
-    
-    var glslLines = [String]()
     
     func generateGLSLForNode(node: SweetcornNode)
     {
@@ -157,49 +151,3 @@ func == (lhs: InputIndex, rhs: InputIndex) -> Bool
     return (lhs.sourceIndex == rhs.sourceIndex) && (lhs.targetIndex == rhs.targetIndex)
 }
 
-// -----
-
-let inputNodeType = SweetcornNodeType(name: "Input",
-    inputLabels: [],
-    outputLabels: ["Red", "Green", "Blue"],
-    glslString: "")
-
-let outputNodeType = SweetcornNodeType(name: "Output",
-    inputLabels: ["Red", "Green", "Blue"],
-    outputLabels: [],
-    glslString: "  return vec4($0, $1, $2, 1.0); \n")
-
-let smoothstepNodeType = SweetcornNodeType(name: "Smoothstep",
-    inputLabels: ["Edge 0: Red", "Edge 0: Green", "Edge 0: Blue", "Edge 1: Red", "Edge 1: Green", "Edge 1: Blue", "x"],
-    outputLabels: ["Red", "Green", "Blue"],
-    glslString: "[TBA]")
-
-let multiplyNodeType = SweetcornNodeType(name: "Multiply",
-    inputLabels: ["x", "y"],
-    outputLabels: ["x * y"],
-    glslString: "  float $VAR_NAME = $0 * $1; \n")
-
-let divideNodeType = SweetcornNodeType(name: "Divide",
-    inputLabels: ["x", "y"],
-    outputLabels: ["x / y"],
-    glslString: "  float $VAR_NAME = $0 / $1; \n")
-
-let squareRootNodeType = SweetcornNodeType(name: "Square Root",
-    inputLabels: ["x"],
-    outputLabels: ["√x"],
-    glslString: "  float $VAR_NAME = sqrt($0); \n")
-
-let destCoordType = SweetcornNodeType(name: "destCoord",
-    inputLabels: [],
-    outputLabels: ["x", "y"],
-    glslString: "  vec2 $VAR_NAME = destCoord() / 640.0; \n")
-
-struct SweetcornNodeType
-{
-    let name: String
-    
-    let inputLabels: [String]
-    let outputLabels: [String]
-    
-    let glslString: String
-}

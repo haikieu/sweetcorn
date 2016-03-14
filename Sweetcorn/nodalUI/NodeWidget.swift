@@ -159,7 +159,7 @@ class ReadonlyLabel: NSTextField
         backgroundColor = NSColor.lightGrayColor()
         textColor = NSColor.blackColor()
         
-        canvas.relationshipTarget = nil
+        // canvas.relationshipTarget = nil
     }
     
     required init?(coder: NSCoder)
