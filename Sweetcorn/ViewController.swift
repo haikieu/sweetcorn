@@ -66,7 +66,7 @@ class ViewController: NSViewController, NSWindowDelegate
             height: frameSize.height)
         
         glslViewer.frame = CGRect(x: frameSize.width - frameSize.height * 0.5,
-            y: frameSize.height - frameSize.height * 0.5,
+            y: 0,
             width: frameSize.height * 0.5,
             height: frameSize.height)
         

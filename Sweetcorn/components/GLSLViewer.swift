@@ -16,6 +16,17 @@ class GLSLViewer: NSView
     let monalisa = NSImage(named: "monalisa.jpg")!
     let ciMonaLisa: CIImage
     
+    var glslString: String?
+    {
+        didSet
+        {
+            if let glslString = glslString
+            {
+                codeView.stringValue = glslString
+            }
+        }
+    }
+    
     override init(frame frameRect: NSRect)
     {
         let tiffData = monalisa.TIFFRepresentation!
@@ -30,7 +41,9 @@ class GLSLViewer: NSView
         codeView.editable = false
         codeView.selectable = true
         codeView.bordered = false
-        
+        codeView.backgroundColor = NSColor.darkGrayColor()
+        codeView.maximumNumberOfLines = 0
+  
         addSubview(imageView)
         addSubview(codeView)
         
@@ -45,17 +58,29 @@ class GLSLViewer: NSView
         fatalError("init(coder:) has not been implemented")
     }
     
+    func copyCode()
+    {
+        guard let glslString = glslString else
+        {
+            return
+        }
+        
+        let pasteboard = NSPasteboard.generalPasteboard()
+        pasteboard.clearContents()
+        pasteboard.writeObjects([glslString])
+    }
+    
     override var frame: NSRect
     {
         didSet
         {
             imageView.frame = CGRect(x: 0,
-                y: 0,
+                y: frame.height - frame.width,
                 width: frame.width,
                 height: frame.width)
             
             codeView.frame = CGRect(x: 0,
-                y: -frame.width,
+                y: 0,
                 width: frame.width,
                 height: frame.height - frame.width)
         }
@@ -66,7 +91,7 @@ extension GLSLViewer: FilteringDelegate
 {
     func glslDidUpdate(glslString: String)
     {
-        codeView.stringValue = glslString
+        self.glslString = glslString
         
         let kernel = CIColorKernel(string: glslString)
         

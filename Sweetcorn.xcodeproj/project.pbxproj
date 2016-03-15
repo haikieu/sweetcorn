@@ -66,8 +66,8 @@
 		3E93D4511C8FE81B000C98DB /* Sweetcorn */ = {
 			isa = PBXGroup;
 			children = (
+				3ECCF9CD1C982EDF00F10F76 /* assets */,
 				3ED69DC21C96D72200E544C9 /* components */,
-				3ED69DC01C962E0E00E544C9 /* monalisa.jpg */,
 				3E93D4661C90AECA000C98DB /* sweetcorn */,
 				3E93D4611C90935C000C98DB /* nodalUI */,
 				3E93D4521C8FE81B000C98DB /* AppDelegate.swift */,
@@ -95,6 +95,14 @@
 				3EA7A5241C973E2000C4D247 /* SweetcornNodeTypes.swift */,
 			);
 			name = sweetcorn;
+			sourceTree = "<group>";
+		};
+		3ECCF9CD1C982EDF00F10F76 /* assets */ = {
+			isa = PBXGroup;
+			children = (
+				3ED69DC01C962E0E00E544C9 /* monalisa.jpg */,
+			);
+			name = assets;
 			sourceTree = "<group>";
 		};
 		3ED69DC21C96D72200E544C9 /* components */ = {
