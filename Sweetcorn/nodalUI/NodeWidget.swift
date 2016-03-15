@@ -16,6 +16,7 @@ class NodeWidget: NSView
     let node: SweetcornNode
     
     let titleLabel = TitleLabel()
+    let deleteButton = NSButton()
     
     required init(canvas: Canvas, node: SweetcornNode)
     {
@@ -56,6 +57,23 @@ class NodeWidget: NSView
             
             addSubview(numericInput)
         }
+        
+        if node.type.name != "Input" && node.type.name != "Output"
+        {
+            let menu = NSMenu(title: "Hello!")
+            menu.addItem(NSMenuItem(title: "Delete node", action: "deleteNode", keyEquivalent: ""))
+            
+            self.menu = menu
+        }
+    }
+    
+    func deleteNode()
+    {
+        model.deleteNode(node)
+        
+        removeFromSuperview()
+        
+        canvas.renderRelationships()
     }
     
     func addLabelWidget(index: Int, name: String, widgetType: LabelWidgetType)
@@ -134,6 +152,9 @@ class NumberEditor: NSTextField
         self.model = model
         
         super.init(frame: CGRectZero)
+        
+        font = NSFont.userFixedPitchFontOfSize(NSFont.systemFontSize())
+        alignment = .Right
     }
 
     required init?(coder: NSCoder)

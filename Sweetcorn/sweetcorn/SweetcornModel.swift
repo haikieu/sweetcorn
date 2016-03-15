@@ -101,6 +101,22 @@ class SweetcornModel
             "var_\(nodes.indexOf({$0 === node})!)"
     }
     
+    func deleteNode(nodeToDelete: SweetcornNode)
+    {
+        for node in nodes
+        {
+            for input in node.inputs
+            {
+                if input.1 === nodeToDelete
+                {
+                    node.inputs[input.0] = nil
+                }
+            }
+        }
+        
+        nodes.removeAtIndex(nodes.indexOf({$0 === nodeToDelete})!)
+    }
+    
     func updateGLSL()
     {
         guard let outputNode = nodes.filter({$0.type.name == "Output"}).first else

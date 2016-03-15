@@ -33,6 +33,11 @@ class NodeTypesList: NSScrollView
         documentView = tableView
         
         horizontalScroller = nil
+        
+        shadow = NSShadow()
+        shadow?.shadowColor = NSColor.blackColor()
+        shadow?.shadowBlurRadius = 5
+        shadow?.shadowOffset = NSSize(width: 0, height: 0)
     }
 
     required init?(coder: NSCoder)

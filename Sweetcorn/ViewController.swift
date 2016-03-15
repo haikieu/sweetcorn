@@ -10,44 +10,27 @@ import Cocoa
 
 let model = SweetcornModel()
 
-class ViewController: NSViewController, NSWindowDelegate, FilteringDelegate
+class ViewController: NSViewController, NSWindowDelegate
 {
-    let monalisa = NSImage(named: "monalisa.jpg")!
-    var ciMonaLisa: CIImage!
-    
     let scrollView = NSScrollView()
     let canvas = Canvas(model: model, frame: CGRect(x: 0, y: 0, width: 2000, height: 2000))
     
-    let imageView = NSImageView()
-    let codeView = NSTextField()
     let nodeTypesList = NodeTypesList(model: model)
+    let glslViewer = GLSLViewer()
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
         
-        view.addSubview(scrollView)
-        
         scrollView.documentView = canvas
-        
         scrollView.hasHorizontalRuler = true
         scrollView.hasVerticalScroller = true
         
-        imageView.image = monalisa
-        
-        codeView.font = NSFont.monospacedDigitSystemFontOfSize(10, weight: NSFontWeightMedium)
-        codeView.editable = false
-        codeView.backgroundColor = NSColor(calibratedRed: 1, green: 1, blue: 1, alpha: 0.5)
-        
-        view.addSubview(imageView)
-        view.addSubview(codeView)
+        view.addSubview(scrollView)
         view.addSubview(nodeTypesList)
+        view.addSubview(glslViewer)
         
-        let tiffData = monalisa.TIFFRepresentation!
-        let bitmap = NSBitmapImageRep(data: tiffData)
-        ciMonaLisa = CIImage(bitmapImageRep: bitmap!)
-        
-        model.filteringDelegate = self
+        model.filteringDelegate = glslViewer
         model.updateGLSL()
     }
     
@@ -65,23 +48,7 @@ class ViewController: NSViewController, NSWindowDelegate, FilteringDelegate
         
         view.window?.delegate = self
     }
-    
-    func glslDidUpdate(glslString: String)
-    {
-        codeView.stringValue = glslString
-        
-        let kernel = CIColorKernel(string: glslString)
-        
-        let filtered = kernel?.applyWithExtent(ciMonaLisa.extent, arguments: [ciMonaLisa])
-        
-        let imageRep = NSCIImageRep(CIImage: filtered!)
-        let final = NSImage(size: ciMonaLisa.extent.size)
-        
-        final.addRepresentation(imageRep)
-        
-        imageView.image = final
-    }
- 
+     
     override func viewDidLayout()
     {
         super.viewDidLayout()
@@ -98,15 +65,10 @@ class ViewController: NSViewController, NSWindowDelegate, FilteringDelegate
             width: frameSize.width - tableViewWidth - frameSize.height * 0.5,
             height: frameSize.height)
         
-        imageView.frame = CGRect(x: frameSize.width - frameSize.height * 0.5,
+        glslViewer.frame = CGRect(x: frameSize.width - frameSize.height * 0.5,
             y: frameSize.height - frameSize.height * 0.5,
             width: frameSize.height * 0.5,
-            height: frameSize.height * 0.5)
-        
-        codeView.frame = CGRect(x: frameSize.width - frameSize.height * 0.5,
-            y: 0,
-            width: frameSize.height * 0.5,
-            height: frameSize.height * 0.5)
+            height: frameSize.height)
         
         nodeTypesList.frame = CGRect(x: 0,
             y: 0,
