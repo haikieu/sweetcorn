@@ -121,6 +121,8 @@ class NodeWidget: NSView
     }
 }
 
+// MARK: Single line numeric entry
+
 class NumberEditor: NSTextField
 {
     let node: SweetcornNode

@@ -53,15 +53,17 @@ class ViewController: NSViewController, NSWindowDelegate, FilteringDelegate
     
     override func viewWillAppear()
     {
+        super.viewWillAppear()
+        
         // view.window?.styleMask =  NSClosableWindowMask | NSTitledWindowMask | NSMiniaturizableWindowMask
         view.window?.setContentSize(NSSize(width: 1024, height: 768))
         view.window?.showsResizeIndicator = false
         view.window?.center()
         view.window?.title = "Sweetcorn: Node Based Kernel Creation"
         
-        view.window?.delegate = self
+        print(view.window?.contentView)
         
-        resizeUI(toSize: view.frame.size)
+        view.window?.delegate = self
     }
     
     func glslDidUpdate(glslString: String)
@@ -72,20 +74,19 @@ class ViewController: NSViewController, NSWindowDelegate, FilteringDelegate
         
         let filtered = kernel?.applyWithExtent(ciMonaLisa.extent, arguments: [ciMonaLisa])
         
-        let xxx = NSCIImageRep(CIImage: filtered!)
+        let imageRep = NSCIImageRep(CIImage: filtered!)
         let final = NSImage(size: ciMonaLisa.extent.size)
         
-        final.addRepresentation(xxx)
+        final.addRepresentation(imageRep)
         
         imageView.image = final
     }
-    
-    
-    func windowWillResize(sender: NSWindow, toSize frameSize: NSSize) -> NSSize
+ 
+    override func viewDidLayout()
     {
-        resizeUI(toSize: frameSize)
+        super.viewDidLayout()
         
-        return frameSize
+        resizeUI(toSize: view.frame.size)
     }
     
     func resizeUI(toSize frameSize: NSSize)
