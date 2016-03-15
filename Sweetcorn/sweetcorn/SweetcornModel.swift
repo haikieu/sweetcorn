@@ -27,6 +27,23 @@ class SweetcornNode
         self.position = position
         self.inputs = inputs
     }
+    
+    func isAscendant(node: SweetcornNode) -> Bool
+    {
+        for inputNode in inputs
+        {
+            if inputNode.1 === node
+            {
+                return true
+            }
+            else if inputNode.1.isAscendant(node)
+            {
+                return true
+            }
+        }
+        
+        return false
+    }
 }
 
 class SweetcornModel
@@ -42,12 +59,17 @@ class SweetcornModel
         subtractNodeType,
         divideNodeType,
         multiplyNodeType,
-        destCoordType,
+        destCoordNormType,
         stepNodeType,
         lumaCoefficientsNodeType,
         dotNodeType,
         mixNodeType,
-        numericNodeType, 
+        numericNodeType,
+        sinNodeType,
+        cosNodeType,
+        destCoordType,
+        moduloNodeType,
+        clampNodeType, 
         squareRootNodeType].sort({$0.name < $1.name})
     
     init()

@@ -83,20 +83,15 @@ class Canvas: NSView
         
         let sourceY = NodeWidget.verticalPositionForLabel(sourceIndex, widgetType: .Output, node: sourceNode)
         
-        CGPathMoveToPoint(path, nil,
-            mouseLocation.x, mouseLocation.y)
-        
-        let controlPointOne = CGPoint(x: sourceNode.position.x + 100,
+
+        let startPoint = CGPoint(x: mouseLocation.x,
             y: mouseLocation.y)
-        let controlPointTwo = CGPoint(x: mouseLocation.x,
-            y: sourceNode.position.y + sourceY + rowHeight / 2)
         let endPoint = CGPoint(x: sourceNode.position.x + 100,
             y: sourceNode.position.y + sourceY + rowHeight / 2)
         
-        CGPathAddCurveToPoint(path, nil,
-            controlPointOne.x, controlPointOne.y,
-            controlPointTwo.x, controlPointTwo.y,
-            endPoint.x, endPoint.y)
+        Canvas.appendConnectingCurveToPath(path,
+            startPoint: startPoint,
+            endPoint: endPoint)
         
         relationshipCreationLayer.path = path
     }
@@ -125,6 +120,7 @@ class Canvas: NSView
         renderRelationships()
         
         self.relationshipCreationSource = nil
+        self.relationshipTarget = nil
         
         model.updateGLSL()
     }
@@ -159,24 +155,36 @@ class Canvas: NSView
                     widgetType: .Input,
                     node: node)
              
-                CGPathMoveToPoint(path, nil,
-                    node.position.x, node.position.y + targetY + rowHeight / 2)
-                
-                let controlPointOne = CGPoint(x: input.1.position.x + 100,
+                let startPoint = CGPoint(x: node.position.x,
                     y: node.position.y + targetY + rowHeight / 2)
-                let controlPointTwo = CGPoint(x: node.position.x,
-                    y: input.1.position.y + sourceY + rowHeight / 2)
                 let endPoint = CGPoint(x: input.1.position.x + 100,
                     y: input.1.position.y + sourceY + rowHeight / 2)
                 
-                CGPathAddCurveToPoint(path, nil,
-                    controlPointOne.x, controlPointOne.y,
-                    controlPointTwo.x, controlPointTwo.y,
-                    endPoint.x, endPoint.y)
+                Canvas.appendConnectingCurveToPath(path,
+                    startPoint: startPoint,
+                    endPoint: endPoint)
             }
         }
         
         curvesLayer.path = path
+    }
+    
+    class func appendConnectingCurveToPath(path: CGMutablePath, startPoint: CGPoint, endPoint: CGPoint)
+    {
+        let offset = max((200 - abs(startPoint.x - endPoint.x)), 0)
+        
+        let controlPointOne = CGPoint(x: endPoint.x - offset,
+            y: startPoint.y)
+        let controlPointTwo = CGPoint(x: startPoint.x + offset,
+            y: endPoint.y)
+        
+        CGPathMoveToPoint(path, nil,
+            startPoint.x, startPoint.y)
+        
+        CGPathAddCurveToPoint(path, nil,
+            controlPointOne.x, controlPointOne.y,
+            controlPointTwo.x, controlPointTwo.y,
+            endPoint.x, endPoint.y)
     }
 }
 

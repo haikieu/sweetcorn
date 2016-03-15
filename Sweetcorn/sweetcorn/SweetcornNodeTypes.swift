@@ -49,10 +49,27 @@ let addNodeType = SweetcornNodeType(name: "Add",
 
 // -----
 
+let sinNodeType = SweetcornNodeType(name: "Sine",
+    inputLabels: ["x"],
+    outputLabels: ["sin(x)"],
+    glslString: "  float $VAR_NAME = sin($0); \n")
+
+let cosNodeType = SweetcornNodeType(name: "Cosine",
+    inputLabels: ["x"],
+    outputLabels: ["cos(x)"],
+    glslString: "  float $VAR_NAME = cos($0); \n")
+
+// -----
+
 let smoothstepNodeType = SweetcornNodeType(name: "Smoothstep",
     inputLabels: ["Edge 0: Red", "Edge 0: Green", "Edge 0: Blue", "Edge 1: Red", "Edge 1: Green", "Edge 1: Blue", "Value (x)", "Value (y)", "Value (z)"],
     outputLabels: ["Red", "Green", "Blue"],
     glslString: "  vec3 $VAR_NAME = smoothstep(vec3($0, $1, $2), vec3($3, $4, $5), vec3($6, $7, $8)); \n")
+
+let clampNodeType = SweetcornNodeType(name: "Clamp",
+    inputLabels: ["Value (x)", "Value (y)", "Value (z)", "Min: Red", "Min: Green", "Min: Blue", "Max: Red", "Max: Green", "Max: Blue"],
+    outputLabels: ["Red", "Green", "Blue"],
+    glslString: "  vec3 $VAR_NAME = clamp(vec3($0, $1, $2), vec3($3, $4, $5), vec3($6, $7, $8)); \n")
 
 let stepNodeType = SweetcornNodeType(name: "Step",
     inputLabels: ["Edge: Red", "Edge: Green", "Edge: Blue", "Value (x)", "Value (y)", "Value (z)"],
@@ -83,10 +100,22 @@ let squareRootNodeType = SweetcornNodeType(name: "Square Root",
     outputLabels: ["√x"],
     glslString: "  float $VAR_NAME = sqrt($0); \n")
 
-let destCoordType = SweetcornNodeType(name: "Coordinate",
+let destCoordNormType = SweetcornNodeType(name: "Norm Coord",
     inputLabels: [],
     outputLabels: ["x", "y"],
     glslString: "  vec2 $VAR_NAME = destCoord() / 640.0; \n")
+
+let destCoordType = SweetcornNodeType(name: "Coord",
+    inputLabels: [],
+    outputLabels: ["x", "y"],
+    glslString: "  vec2 $VAR_NAME = destCoord(); \n")
+
+let moduloNodeType =  SweetcornNodeType(name: "Modulo",
+    inputLabels: ["x", "y"],
+    outputLabels: ["mod(x, y)"],
+    glslString: "  float $VAR_NAME = mod($0, $1); \n")
+
+// -----
 
 struct SweetcornNodeType
 {

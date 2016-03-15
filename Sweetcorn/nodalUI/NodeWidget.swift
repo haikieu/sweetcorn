@@ -205,9 +205,15 @@ class ReadonlyLabel: NSTextField
             return
         }
         
-        backgroundColor = NSColor.magentaColor()
         textColor = NSColor.whiteColor()
         
+        if canvas.relationshipCreationSource!.node.isAscendant(node)
+        {
+            backgroundColor = NSColor.redColor()
+            return
+        }
+        
+        backgroundColor = NSColor.magentaColor()
         canvas.relationshipTarget = (index: index, node: node)
     }
     
