@@ -16,6 +16,7 @@
 		3E93D4681C90AEF1000C98DB /* SweetcornModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E93D4671C90AEF1000C98DB /* SweetcornModel.swift */; };
 		3EA7A5251C973E2000C4D247 /* SweetcornNodeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA7A5241C973E2000C4D247 /* SweetcornNodeTypes.swift */; };
 		3EA7A5271C980E5600C4D247 /* GLSLViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA7A5261C980E5600C4D247 /* GLSLViewer.swift */; };
+		3ECCF9CF1C984A4700F10F76 /* sweetcorn.png in Resources */ = {isa = PBXBuildFile; fileRef = 3ECCF9CE1C984A4700F10F76 /* sweetcorn.png */; };
 		3ED69DC11C962E0E00E544C9 /* monalisa.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3ED69DC01C962E0E00E544C9 /* monalisa.jpg */; };
 		3ED69DC41C96D74C00E544C9 /* NodeTypesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED69DC31C96D74C00E544C9 /* NodeTypesList.swift */; };
 /* End PBXBuildFile section */
@@ -32,6 +33,7 @@
 		3E93D4671C90AEF1000C98DB /* SweetcornModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SweetcornModel.swift; path = sweetcorn/SweetcornModel.swift; sourceTree = "<group>"; };
 		3EA7A5241C973E2000C4D247 /* SweetcornNodeTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SweetcornNodeTypes.swift; path = sweetcorn/SweetcornNodeTypes.swift; sourceTree = "<group>"; };
 		3EA7A5261C980E5600C4D247 /* GLSLViewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GLSLViewer.swift; path = components/GLSLViewer.swift; sourceTree = "<group>"; };
+		3ECCF9CE1C984A4700F10F76 /* sweetcorn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sweetcorn.png; sourceTree = "<group>"; };
 		3ED69DC01C962E0E00E544C9 /* monalisa.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = monalisa.jpg; sourceTree = "<group>"; };
 		3ED69DC31C96D74C00E544C9 /* NodeTypesList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NodeTypesList.swift; path = components/NodeTypesList.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -100,6 +102,7 @@
 		3ECCF9CD1C982EDF00F10F76 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				3ECCF9CE1C984A4700F10F76 /* sweetcorn.png */,
 				3ED69DC01C962E0E00E544C9 /* monalisa.jpg */,
 			);
 			name = assets;
@@ -174,6 +177,7 @@
 			files = (
 				3E93D4571C8FE81B000C98DB /* Assets.xcassets in Resources */,
 				3E93D45A1C8FE81B000C98DB /* Main.storyboard in Resources */,
+				3ECCF9CF1C984A4700F10F76 /* sweetcorn.png in Resources */,
 				3ED69DC11C962E0E00E544C9 /* monalisa.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
