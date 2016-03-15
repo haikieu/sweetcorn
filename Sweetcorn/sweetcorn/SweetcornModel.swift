@@ -69,7 +69,9 @@ class SweetcornModel
         cosNodeType,
         destCoordType,
         moduloNodeType,
-        clampNodeType, 
+        clampNodeType,
+        absolutetNodeType,
+        piNodeType, 
         squareRootNodeType].sort({$0.name < $1.name})
     
     init()

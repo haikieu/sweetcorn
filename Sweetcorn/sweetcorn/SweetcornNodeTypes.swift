@@ -39,13 +39,25 @@ let divideNodeType = SweetcornNodeType(name: "Divide",
 
 let subtractNodeType = SweetcornNodeType(name: "Subtract",
     inputLabels: ["x", "y"],
-    outputLabels: ["x * y"],
+    outputLabels: ["x - y"],
     glslString: "  float $VAR_NAME = $0 - $1; \n")
 
 let addNodeType = SweetcornNodeType(name: "Add",
     inputLabels: ["x", "y"],
-    outputLabels: ["x / y"],
+    outputLabels: ["x + y"],
     glslString: "  float $VAR_NAME = $0 + $1; \n")
+
+// -----
+
+let squareRootNodeType = SweetcornNodeType(name: "Square Root",
+    inputLabels: ["x"],
+    outputLabels: ["√x"],
+    glslString: "  float $VAR_NAME = sqrt($0); \n")
+
+let absolutetNodeType = SweetcornNodeType(name: "Absolute",
+    inputLabels: ["x"],
+    outputLabels: ["|x|"],
+    glslString: "  float $VAR_NAME = abs($0); \n")
 
 // -----
 
@@ -93,12 +105,12 @@ let lumaCoefficientsNodeType = SweetcornNodeType(name: "Luma Coef",
     outputLabels: ["Red", "Green", "Blue"],
     glslString: "  vec3 $VAR_NAME = vec3(0.2126, 0.7152, 0.0722); \n")
 
-// -----
+let piNodeType = SweetcornNodeType(name: "Pi",
+    inputLabels: [],
+    outputLabels: ["𝛑"],
+    glslString: "  float $VAR_NAME = \(M_PI) ; \n")
 
-let squareRootNodeType = SweetcornNodeType(name: "Square Root",
-    inputLabels: ["x"],
-    outputLabels: ["√x"],
-    glslString: "  float $VAR_NAME = sqrt($0); \n")
+// -----
 
 let destCoordNormType = SweetcornNodeType(name: "Norm Coord",
     inputLabels: [],
