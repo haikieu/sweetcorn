@@ -5,6 +5,18 @@
 //  Created by Simon Gladman on 09/03/2016.
 //  Copyright © 2016 Simon Gladman. All rights reserved.
 //
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import Cocoa
 
@@ -171,11 +183,11 @@ class Canvas: NSView
     
     class func appendConnectingCurveToPath(path: CGMutablePath, startPoint: CGPoint, endPoint: CGPoint)
     {
-        let offset = max((200 - abs(startPoint.x - endPoint.x)), 0)
+        let offset = abs(startPoint.x - endPoint.x) / 3.0
         
-        let controlPointOne = CGPoint(x: endPoint.x - offset,
+        let controlPointOne = CGPoint(x: endPoint.x + offset,
             y: startPoint.y)
-        let controlPointTwo = CGPoint(x: startPoint.x + offset,
+        let controlPointTwo = CGPoint(x: startPoint.x - offset,
             y: endPoint.y)
         
         CGPathMoveToPoint(path, nil,
