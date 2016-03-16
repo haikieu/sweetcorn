@@ -20,7 +20,7 @@
 
 import Cocoa
 
-class Canvas: NSView
+class Canvas: NSView, NodeInterfaceDelegate
 {
     let curvesLayer = CAShapeLayer()
     let relationshipCreationLayer = CAShapeLayer()
@@ -137,6 +137,16 @@ class Canvas: NSView
         model.updateGLSL()
     }
 
+    func refresh()
+    {
+        subviews.forEach
+        {
+            $0.removeFromSuperview()
+        }
+        
+        updateUI()
+    }
+    
     func updateUI()
     {
         for node in model.nodes

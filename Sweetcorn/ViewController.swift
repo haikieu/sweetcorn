@@ -22,7 +22,7 @@ import Cocoa
 
 let model = SweetcornModel()
 
-class ViewController: NSViewController, NSWindowDelegate
+class ViewController: NSViewController
 {
     let scrollView = NSScrollView()
     let canvas = Canvas(model: model, frame: CGRect(x: 0, y: 0, width: 2000, height: 2000))
@@ -42,6 +42,7 @@ class ViewController: NSViewController, NSWindowDelegate
         view.addSubview(nodeTypesList)
         view.addSubview(glslViewer)
         
+        model.nodeInterfaceDelegate = canvas
         model.filteringDelegate = glslViewer
         model.updateGLSL()
     }
@@ -50,15 +51,10 @@ class ViewController: NSViewController, NSWindowDelegate
     {
         super.viewWillAppear()
         
-        // view.window?.styleMask =  NSClosableWindowMask | NSTitledWindowMask | NSMiniaturizableWindowMask
         view.window?.setContentSize(NSSize(width: 1024, height: 768))
         view.window?.showsResizeIndicator = false
         view.window?.center()
         view.window?.title = "Sweetcorn: Node Based Kernel Creation"
-        
-        print(view.window?.contentView)
-        
-        view.window?.delegate = self
     }
      
     override func viewDidLayout()
@@ -87,5 +83,22 @@ class ViewController: NSViewController, NSWindowDelegate
             width: tableViewWidth,
             height: frameSize.height)
     }
+}
+
+extension ViewController // Menu Items
+{
+    func newDocument(_:NSMenuItem)
+    {
+        model.newDocument()
+    }
     
+    func saveDocumentAs(_:NSMenuItem)
+    {
+        model.saveDocument()
+    }
+    
+    func openDocument(_:NSMenuItem)
+    {
+        model.openDocument()
+    }
 }

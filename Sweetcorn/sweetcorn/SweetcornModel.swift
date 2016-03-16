@@ -20,6 +20,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 import Foundation
+import Cocoa
 
 class SweetcornNode
 {
@@ -60,6 +61,7 @@ class SweetcornNode
 class SweetcornModel
 {
     weak var filteringDelegate: FilteringDelegate?
+    weak var nodeInterfaceDelegate: NodeInterfaceDelegate?
     
     var nodes: [SweetcornNode]
     var glslLines = [String]()
@@ -97,14 +99,22 @@ class SweetcornModel
         
         let outputNode = SweetcornNode(type: outputNodeType, position: CGPoint(x: 380, y: 300), inputs: inputs)
      
-        nodes = [inputNode, outputNode] //, multiplyNode, squareRootNode, destCoordNode]
+        nodes = [inputNode, outputNode]
         
         updateGLSL()
     }
     
     func nodeTypeForName(name: String) -> SweetcornNodeType?
     {
-        return nodeTypes.filter({$0.name == name}).first
+        switch name
+        {
+        case "Input":
+            return inputNodeType
+        case "Output":
+            return outputNodeType
+        default:
+            return nodeTypes.filter({$0.name == name}).first
+        }
     }
     
     func node_id(node: SweetcornNode) -> String
@@ -187,6 +197,191 @@ class SweetcornModel
             generateGLSLForNode(input.1)
         }
     }
+    
+    // MARK: Saving and opening...
+    // TODO: Refactor these monster functions!
+    
+    func newDocument()
+    {
+        let inputNode = SweetcornNode(type: inputNodeType, position: CGPoint(x: 20, y: 400))
+        
+        let inputs = [
+            InputIndex(sourceIndex: 0, targetIndex: 0): inputNode,
+            InputIndex(sourceIndex: 1, targetIndex: 1): inputNode,
+            InputIndex(sourceIndex: 2, targetIndex: 2): inputNode
+        ]
+        
+        let outputNode = SweetcornNode(type: outputNodeType, position: CGPoint(x: 380, y: 300), inputs: inputs)
+        
+        nodes = [inputNode, outputNode]
+        
+        nodeInterfaceDelegate?.refresh()
+        updateGLSL()
+    }
+    
+    func saveDocument()
+    {
+        var serializableNodes = [[String: AnyObject]]()
+        
+        for (idx, node) in nodes.enumerate()
+        {
+            var dict = [String: AnyObject]()
+
+            dict["index"] = idx
+            dict["type"] = node.type.name
+            dict["floatValue"] = node.floatValue
+            dict["positionx"] = node.position.x
+            dict["positiony"] = node.position.y
+
+            var inputs = [[String: AnyObject]]()
+            
+            for input in node.inputs
+            {
+                var inputDict = [String: AnyObject]()
+                
+                inputDict["sourceIndex"] = input.0.sourceIndex
+                inputDict["targetIndex"] = input.0.targetIndex
+                inputDict["inputNodeIndex"] = nodes.indexOf({$0 === input.1})
+                
+                inputs.append(inputDict)
+            }
+            
+            dict["inputs"] = inputs
+            
+            serializableNodes.append(dict)
+        }
+        
+        let jsonString: NSString
+        
+        do
+        {
+            let jsonData = try NSJSONSerialization.dataWithJSONObject(serializableNodes,
+                options: NSJSONWritingOptions.PrettyPrinted)
+            
+             jsonString = NSString(data: jsonData, encoding: NSUTF8StringEncoding)!
+        }
+        catch
+        {
+             fatalError("Failed to generate JSON")
+        }
+
+        let savePanel = NSSavePanel()
+        savePanel.allowedFileTypes = ["sweetcorn"]
+        
+        savePanel.beginSheetModalForWindow(NSApplication.sharedApplication().windows.first!)
+        {
+            (result: Int) in
+        
+            if let url = savePanel.URL where result == 1
+            {
+                do
+                {
+                    try jsonString.writeToURL(url,
+                        atomically: true,
+                        encoding: NSUTF8StringEncoding)
+                }
+                catch
+                {
+                    alert("Unable to save file.")
+                }
+            }
+        }
+    }
+    
+    func openDocument()
+    {
+        let openPanel = NSOpenPanel()
+        openPanel.allowedFileTypes = ["sweetcorn"]
+        
+        openPanel.beginSheetModalForWindow(NSApplication.sharedApplication().windows.first!)
+        {
+            (result: Int) in
+            
+            if let url = openPanel.URL where result == 1
+            {
+                do
+                {
+                    let json = try NSString(contentsOfURL: url,
+                        encoding: NSUTF8StringEncoding)
+                    
+                    self.populateNodesFromJSON(json)
+                }
+                catch
+                {
+                    alert("Unable to open file.")
+                }
+            }
+        }
+    }
+    
+    func populateNodesFromJSON(jsonString: NSString)
+    {
+        guard let data = jsonString.dataUsingEncoding(NSUTF8StringEncoding) else
+        {
+            return
+        }
+        
+        let jsonObject: AnyObject
+        
+        do
+        {
+            jsonObject = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers)
+        }
+        catch
+        {
+            alert("Unable to parse JSON")
+            return
+        }
+
+        if let jsonArray = jsonObject as? NSArray
+        {
+            nodes.removeAll()
+            var nodesByIndex = [Int: SweetcornNode]()
+            
+            for node in jsonArray
+            {
+                let nodeType = nodeTypeForName(String(node["type"] as! NSString))!
+                let nodeFloatValue = node["floatValue"] as! Float
+                let nodePositionX = CGFloat(node["positionx"] as! NSNumber)
+                let nodePositionY = CGFloat(node["positiony"] as! NSNumber)
+              
+                let newNode = SweetcornNode(type: nodeType, position: CGPoint(x: nodePositionX, y: nodePositionY))
+                newNode.floatValue = nodeFloatValue
+                
+                nodes.append(newNode)
+                
+                nodesByIndex[node["index"] as! Int] = newNode; Swift.print(node["index"] as! Int)
+            }
+            
+            // Now nodes are updated, we can create relationsips
+            
+            for node in jsonArray
+            {
+                for input in node["inputs"] as! NSArray
+                {
+                    let inputNode = nodesByIndex[input["inputNodeIndex"] as! Int]
+                    let sourceIndex = input["sourceIndex"] as! Int
+                    let targetIndex = input["targetIndex"] as! Int
+                    let targetNode = nodesByIndex[node["index"] as! Int]
+                    
+                    targetNode?.inputs[ InputIndex(sourceIndex: sourceIndex, targetIndex: targetIndex) ] = inputNode
+                }
+            }
+            
+            nodeInterfaceDelegate?.refresh()
+            updateGLSL()
+        }
+    }
+}
+
+// -----
+
+func alert(message: String)
+{
+    let alert = NSAlert()
+    alert.messageText = message
+    alert.alertStyle = .WarningAlertStyle
+    alert.runModal()
 }
 
 // -----
@@ -194,6 +389,11 @@ class SweetcornModel
 protocol FilteringDelegate: class
 {
     func glslDidUpdate(glslString: String)
+}
+
+protocol NodeInterfaceDelegate: class
+{
+    func refresh()
 }
 
 // -----
