@@ -350,7 +350,7 @@ class SweetcornModel
                 
                 nodes.append(newNode)
                 
-                nodesByIndex[node["index"] as! Int] = newNode; Swift.print(node["index"] as! Int)
+                nodesByIndex[node["index"] as! Int] = newNode
             }
             
             // Now nodes are updated, we can create relationsips
