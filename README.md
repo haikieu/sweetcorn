@@ -57,3 +57,7 @@ let outputImage = monochrome.applyWithExtent(view.bounds, arguments: arguments)
 ```
 
 If you want to learn more about Core Image filters using custom kernels and how to wrap up this kernel as a fully fledged `CIFilter`, I heartily recommend my book, [Core Image for Swift](https://itunes.apple.com/us/book/core-image-for-swift/id1073029980?ls=1&mt=13). 
+
+## Revision History
+
+* March 16, 2016 - Added support for saving and opening Sweetcorn project files. This functions are called from the main application menu and the projects are saved as JSON. Some of the functions are quite long, so will refactor. Also needs a step to ensure user doesn't lose data if they don't want to. 
