@@ -1,0 +1,85 @@
+[
+  {
+    "type" : "Input",
+    "positionx" : 27,
+    "inputs" : [
+
+    ],
+    "positiony" : 286,
+    "index" : 0,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Output",
+    "positionx" : 386,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 2,
+        "inputNodeIndex" : 3
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 3
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 3
+      }
+    ],
+    "positiony" : 381,
+    "index" : 1,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Luma Coef",
+    "positionx" : 37.84375,
+    "inputs" : [
+
+    ],
+    "positiony" : 511.75,
+    "index" : 2,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Dot Product",
+    "positionx" : 223.1484375,
+    "inputs" : [
+      {
+        "sourceIndex" : 1,
+        "targetIndex" : 4,
+        "inputNodeIndex" : 0
+      },
+      {
+        "sourceIndex" : 2,
+        "targetIndex" : 5,
+        "inputNodeIndex" : 0
+      },
+      {
+        "sourceIndex" : 1,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 2
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 2
+      },
+      {
+        "sourceIndex" : 2,
+        "targetIndex" : 2,
+        "inputNodeIndex" : 2
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 3,
+        "inputNodeIndex" : 0
+      }
+    ],
+    "positiony" : 485.6015625,
+    "index" : 3,
+    "floatValue" : 0
+  }
+]
