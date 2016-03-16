@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3E12D2EE1C99CEAC0047C226 /* Tiles.sweetcorn in Resources */ = {isa = PBXBuildFile; fileRef = 3E12D2ED1C99CEAC0047C226 /* Tiles.sweetcorn */; };
 		3E2C47801C99C7DC00FAAD3A /* monochrome.sweetcorn in Resources */ = {isa = PBXBuildFile; fileRef = 3E2C477F1C99C7DC00FAAD3A /* monochrome.sweetcorn */; };
 		3E93D4531C8FE81B000C98DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E93D4521C8FE81B000C98DB /* AppDelegate.swift */; };
 		3E93D4551C8FE81B000C98DB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E93D4541C8FE81B000C98DB /* ViewController.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3E12D2ED1C99CEAC0047C226 /* Tiles.sweetcorn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Tiles.sweetcorn; path = sweetcornProjects/Tiles.sweetcorn; sourceTree = "<group>"; };
 		3E2C477F1C99C7DC00FAAD3A /* monochrome.sweetcorn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = monochrome.sweetcorn; path = sweetcornProjects/monochrome.sweetcorn; sourceTree = "<group>"; };
 		3E93D44F1C8FE81B000C98DB /* Sweetcorn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sweetcorn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E93D4521C8FE81B000C98DB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -54,6 +56,7 @@
 		3E2C477E1C99C7D100FAAD3A /* sweetcornProjects */ = {
 			isa = PBXGroup;
 			children = (
+				3E12D2ED1C99CEAC0047C226 /* Tiles.sweetcorn */,
 				3E2C477F1C99C7DC00FAAD3A /* monochrome.sweetcorn */,
 			);
 			name = sweetcornProjects;
@@ -190,6 +193,7 @@
 				3E93D45A1C8FE81B000C98DB /* Main.storyboard in Resources */,
 				3ECCF9CF1C984A4700F10F76 /* sweetcorn.png in Resources */,
 				3E2C47801C99C7DC00FAAD3A /* monochrome.sweetcorn in Resources */,
+				3E12D2EE1C99CEAC0047C226 /* Tiles.sweetcorn in Resources */,
 				3ED69DC11C962E0E00E544C9 /* monalisa.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,0 +1,312 @@
+[
+  {
+    "type" : "Input",
+    "positionx" : 38,
+    "inputs" : [
+
+    ],
+    "positiony" : 574,
+    "index" : 0,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Output",
+    "positionx" : 1232,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 2,
+        "inputNodeIndex" : 18
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 16
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 17
+      }
+    ],
+    "positiony" : 560,
+    "index" : 1,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Float",
+    "positionx" : 31.87890625,
+    "inputs" : [
+
+    ],
+    "positiony" : 848.9140625,
+    "index" : 2,
+    "floatValue" : 50
+  },
+  {
+    "type" : "Norm Coord",
+    "positionx" : 33.765625,
+    "inputs" : [
+
+    ],
+    "positiony" : 743.640625,
+    "index" : 3,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Sine",
+    "positionx" : 346.24609375,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 5
+      }
+    ],
+    "positiony" : 745.98046875,
+    "index" : 4,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Multiply",
+    "positionx" : 201.33984375,
+    "inputs" : [
+      {
+        "sourceIndex" : 1,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 3
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 2
+      }
+    ],
+    "positiony" : 692.28125,
+    "index" : 5,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Absolute",
+    "positionx" : 483.0390625,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 4
+      }
+    ],
+    "positiony" : 746.859375,
+    "index" : 6,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Multiply",
+    "positionx" : 801.21875,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 10
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 0
+      }
+    ],
+    "positiony" : 678.8828125,
+    "index" : 7,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Multiply",
+    "positionx" : 786.8984375,
+    "inputs" : [
+      {
+        "sourceIndex" : 1,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 0
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 10
+      }
+    ],
+    "positiony" : 551.4375,
+    "index" : 8,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Multiply",
+    "positionx" : 773.1328125,
+    "inputs" : [
+      {
+        "sourceIndex" : 2,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 0
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 10
+      }
+    ],
+    "positiony" : 434.69140625,
+    "index" : 9,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Multiply",
+    "positionx" : 638.97265625,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 6
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 11
+      }
+    ],
+    "positiony" : 812.5078125,
+    "index" : 10,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Float",
+    "positionx" : 379.80859375,
+    "inputs" : [
+
+    ],
+    "positiony" : 879.078125,
+    "index" : 11,
+    "floatValue" : 1.5
+  },
+  {
+    "type" : "Multiply",
+    "positionx" : 204.85546875,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 3
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 2
+      }
+    ],
+    "positiony" : 930.515625,
+    "index" : 12,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Cosine",
+    "positionx" : 347.38671875,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 12
+      }
+    ],
+    "positiony" : 1011.33984375,
+    "index" : 13,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Absolute",
+    "positionx" : 512.890625,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 13
+      }
+    ],
+    "positiony" : 1002.85546875,
+    "index" : 14,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Multiply",
+    "positionx" : 671.68359375,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 14
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 11
+      }
+    ],
+    "positiony" : 920.8515625,
+    "index" : 15,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Multiply",
+    "positionx" : 1037.3515625,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 15
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 7
+      }
+    ],
+    "positiony" : 786.42578125,
+    "index" : 16,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Multiply",
+    "positionx" : 1053.2734375,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 15
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 8
+      }
+    ],
+    "positiony" : 645.5234375,
+    "index" : 17,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Multiply",
+    "positionx" : 1073.83203125,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 9
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 15
+      }
+    ],
+    "positiony" : 479.1015625,
+    "index" : 18,
+    "floatValue" : 0
+  }
+]
