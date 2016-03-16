@@ -30,14 +30,14 @@ kernel vec4 color(__sample pixel)
 }
 ```
 
-That code can be copied and pasted into a new text file (in Xcode, use `File -> New -> File...` and create an empty file under `Other`). If the code above is saved o a file named `monochrome.cikernel`, a `CIColorKernel` would be created with this code:
+That code can be copied and pasted into a new text file (in Xcode, use `File -> New -> File...` and create an empty file under `Other`). If the code above is saved to a file named `monochrome.cikernel`, a `CIColorKernel` would be created with this code:
 
 ```
-lazy var nebulaKernel: CIColorKernel =
+lazy var monochromeKernel: CIColorKernel =
 {
-    let nebulaShaderPath = NSBundle.mainBundle().pathForResource("monochrome", ofType: "cikernel")
+    let monochromeShaderPath = NSBundle.mainBundle().pathForResource("monochrome", ofType: "cikernel")
     
-    guard let path = nebulaShaderPath,
+    guard let path = monochromeShaderPath,
         code = try? String(contentsOfFile: path),
         kernel = CIColorKernel(string: code) else
     {
@@ -53,7 +53,7 @@ To generate a filtered `CIImage` using the kernel, use this following Swift code
 ```swift
 let arguments = [inputImage] // inputImage is of type CIImage
         
-let outputImage = nebulaKernel.applyWithExtent(view.bounds, arguments: arguments)
+let outputImage = monochrome.applyWithExtent(view.bounds, arguments: arguments)
 ```
 
 If you want to learn more about Core Image filters using custom kernels and how to wrap up this kernel as a fully fledged `CIFilter`, I heartily recommend my book, [Core Image for Swift](https://itunes.apple.com/us/book/core-image-for-swift/id1073029980?ls=1&mt=13). 
