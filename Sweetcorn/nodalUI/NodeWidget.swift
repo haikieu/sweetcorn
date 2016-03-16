@@ -65,7 +65,7 @@ class NodeWidget: NSView
                 width: 100,
                 height: rowHeight)
             
-            numericInput.floatValue = 0.0
+            numericInput.floatValue = node.floatValue
             
             addSubview(numericInput)
         }
