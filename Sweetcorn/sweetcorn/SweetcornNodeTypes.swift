@@ -61,6 +61,11 @@ let addNodeType = SweetcornNodeType(name: "Add",
 
 // -----
 
+let lengthNodeType = SweetcornNodeType(name: "Length",
+    inputLabels: ["x", "y"],
+    outputLabels: ["length(xy)"],
+    glslString: "  float $VAR_NAME = length(vec2($0, $1)); \n")
+
 let squareRootNodeType = SweetcornNodeType(name: "Square Root",
     inputLabels: ["x"],
     outputLabels: ["√x"],

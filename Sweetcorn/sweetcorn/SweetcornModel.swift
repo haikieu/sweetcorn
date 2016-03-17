@@ -89,6 +89,7 @@ class SweetcornModel
         fractNodeType,
         ceilNodeType,
         floorNodeType,
+        lengthNodeType, 
         squareRootNodeType].sort({$0.name < $1.name})
     
     init()
