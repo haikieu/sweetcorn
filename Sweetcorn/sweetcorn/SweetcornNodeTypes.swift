@@ -71,6 +71,26 @@ let absolutetNodeType = SweetcornNodeType(name: "Absolute",
     outputLabels: ["|x|"],
     glslString: "  float $VAR_NAME = abs($0); \n")
 
+let powerNodeType = SweetcornNodeType(name: "Power",
+    inputLabels: ["x", "y"],
+    outputLabels: ["xʸ"],
+    glslString: "  float $VAR_NAME = pow($0, $1); \n")
+
+let fractNodeType = SweetcornNodeType(name: "Fractional",
+    inputLabels: ["x"],
+    outputLabels: ["fract(x)"],
+    glslString: "  float $VAR_NAME = fract($0); \n")
+
+let ceilNodeType = SweetcornNodeType(name: "Ceiling",
+    inputLabels: ["x"],
+    outputLabels: ["fract(x)"],
+    glslString: "  float $VAR_NAME = ceil($0); \n")
+
+let floorNodeType = SweetcornNodeType(name: "Floor",
+    inputLabels: ["x"],
+    outputLabels: ["fract(x)"],
+    glslString: "  float $VAR_NAME = floor($0); \n")
+
 // -----
 
 let sinNodeType = SweetcornNodeType(name: "Sine",

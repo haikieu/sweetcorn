@@ -17,6 +17,8 @@
 
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>
+//
+//  icon: Corn by Creative Stall from the Noun Project
 
 import Cocoa
 
@@ -35,8 +37,8 @@ class ViewController: NSViewController
         super.viewDidLoad()
         
         scrollView.documentView = canvas
+        scrollView.hasVerticalRuler = true
         scrollView.hasHorizontalRuler = true
-        scrollView.hasVerticalScroller = true
         
         view.addSubview(scrollView)
         view.addSubview(nodeTypesList)
