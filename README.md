@@ -63,8 +63,7 @@ If you want to learn more about Core Image filters using custom kernels and how 
 * March 16, 2016 - Added support for saving and opening Sweetcorn project files. This functions are called from the main application menu and the projects are saved as JSON. Some of the functions are quite long, so will refactor. Also needs a step to ensure user doesn't lose data if they don't want to. 
 
 * March 17, 2016 - Added icons. Added length, power, fractional, ceiling and floor functions. Added new _vignette_ project example.
-* 
 
 ## Acknowledgements
 
-The app icon is: Corn by Creative Stall from the Noun Project
+The app icon is: **Corn by Creative Stall from the Noun Project**
