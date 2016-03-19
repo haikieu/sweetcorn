@@ -53,7 +53,7 @@ To generate a filtered `CIImage` using the kernel, use this following Swift code
 ```swift
 let arguments = [inputImage] // inputImage is of type CIImage
         
-let outputImage = monochrome.applyWithExtent(inputImage.extent, 
+let outputImage = monochromeKernel.applyWithExtent(inputImage.extent, 
     arguments: arguments)
 ```
 
