@@ -53,7 +53,8 @@ To generate a filtered `CIImage` using the kernel, use this following Swift code
 ```swift
 let arguments = [inputImage] // inputImage is of type CIImage
         
-let outputImage = monochrome.applyWithExtent(view.bounds, arguments: arguments)
+let outputImage = monochromeKernel.applyWithExtent(inputImage.extent, 
+    arguments: arguments)
 ```
 
 If you want to learn more about Core Image filters using custom kernels and how to wrap up this kernel as a fully fledged `CIFilter`, I heartily recommend my book, [Core Image for Swift](https://itunes.apple.com/us/book/core-image-for-swift/id1073029980?ls=1&mt=13). 
@@ -62,4 +63,8 @@ If you want to learn more about Core Image filters using custom kernels and how 
 
 * March 16, 2016 - Added support for saving and opening Sweetcorn project files. This functions are called from the main application menu and the projects are saved as JSON. Some of the functions are quite long, so will refactor. Also needs a step to ensure user doesn't lose data if they don't want to. 
 
-* March 17, 2016 - Added icons. Added power, fractional, ceiling and floor functions
+* March 17, 2016 - Added icons. Added length, power, fractional, ceiling and floor functions. Added new _vignette_ project example.
+
+## Acknowledgements
+
+The app icon is: **Corn by Creative Stall from the Noun Project**
