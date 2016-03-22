@@ -73,7 +73,7 @@ class NodeWidget: NSView
         if node.type.name != "Input" && node.type.name != "Output"
         {
             let menu = NSMenu(title: "sweetcorn")
-            menu.addItem(NSMenuItem(title: "Delete node", action: "deleteNode", keyEquivalent: ""))
+            menu.addItem(NSMenuItem(title: "Delete node", action: #selector(NodeWidget.deleteNode), keyEquivalent: ""))
             
             self.menu = menu
         }
