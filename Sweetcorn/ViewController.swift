@@ -89,9 +89,9 @@ class ViewController: NSViewController
 
 extension ViewController // Menu Items
 {
-    func newDocument(_:NSMenuItem)
+    func newDocument(menuItem:NSMenuItem)
     {
-        model.newDocument()
+        model.newDocument(menuItem.title == "New Color Kernel" ? .Color : .Warp)
     }
     
     func saveDocumentAs(_:NSMenuItem)

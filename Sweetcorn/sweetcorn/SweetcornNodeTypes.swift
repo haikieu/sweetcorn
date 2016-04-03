@@ -32,6 +32,11 @@ let outputNodeType = SweetcornNodeType(name: "Output",
     outputLabels: [],
     glslString: "  return vec4($0, $1, $2, 1.0); \n")
 
+let outputWarpNodeType = SweetcornNodeType(name: "Output",
+    inputLabels: ["x", "y"],
+    outputLabels: [],
+    glslString: "  return vec2($0, $1); \n")
+
 let numericNodeType = SweetcornNodeType(name: "Float",
     inputLabels: [],
     outputLabels: ["x"],

@@ -1,0 +1,194 @@
+[
+  {
+    "type" : "Coord",
+    "positionx" : 25,
+    "inputs" : [
+
+    ],
+    "positiony" : 310,
+    "index" : 0,
+    "floatValue" : 0
+  },
+  {
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 6
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 11
+      }
+    ],
+    "mode" : "Warp",
+    "index" : 1,
+    "positionx" : 912,
+    "floatValue" : 0,
+    "positiony" : 306,
+    "type" : "Output"
+  },
+  {
+    "type" : "Sine",
+    "positionx" : 415.81640625,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 3
+      }
+    ],
+    "positiony" : 497.921875,
+    "index" : 2,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Divide",
+    "positionx" : 222.58984375,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 0
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 4
+      }
+    ],
+    "positiony" : 494.96875,
+    "index" : 3,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Float",
+    "positionx" : 52.5,
+    "inputs" : [
+
+    ],
+    "positiony" : 646.19921875,
+    "index" : 4,
+    "floatValue" : 15
+  },
+  {
+    "type" : "Multiply",
+    "positionx" : 553.1875,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 2
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 4
+      }
+    ],
+    "positiony" : 412.73046875,
+    "index" : 5,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Add",
+    "positionx" : 723.4609375,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 5
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 0
+      }
+    ],
+    "positiony" : 378.94921875,
+    "index" : 6,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Float",
+    "positionx" : 54.01953125,
+    "inputs" : [
+
+    ],
+    "positiony" : 101.140625,
+    "index" : 7,
+    "floatValue" : 30
+  },
+  {
+    "type" : "Divide",
+    "positionx" : 215.33203125,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 7
+      },
+      {
+        "sourceIndex" : 1,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 0
+      }
+    ],
+    "positiony" : 188.7421875,
+    "index" : 8,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Cosine",
+    "positionx" : 421.20703125,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 8
+      }
+    ],
+    "positiony" : 85.9296875,
+    "index" : 9,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Multiply",
+    "positionx" : 586.296875,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 7
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 9
+      }
+    ],
+    "positiony" : 147.85546875,
+    "index" : 10,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Add",
+    "positionx" : 746.46484375,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 10
+      },
+      {
+        "sourceIndex" : 1,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 0
+      }
+    ],
+    "positiony" : 192.89453125,
+    "index" : 11,
+    "floatValue" : 0
+  }
+]

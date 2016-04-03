@@ -105,11 +105,29 @@ extension GLSLViewer: FilteringDelegate
     {
         self.glslString = glslString
         
-        let kernel = CIColorKernel(string: glslString)
+        let filteredImage: CIImage?
         
-        let filtered = kernel?.applyWithExtent(ciMonaLisa.extent, arguments: [ciMonaLisa])
-        
-        let imageRep = NSCIImageRep(CIImage: filtered!)
+        switch model.mode
+        {
+        case .Color:
+            let kernel = CIColorKernel(string: glslString)
+            
+            filteredImage = kernel?.applyWithExtent(ciMonaLisa.extent, arguments: [ciMonaLisa])
+            
+        case .Warp:
+            let kernel = CIWarpKernel(string: glslString)
+            
+            filteredImage = kernel?.applyWithExtent(ciMonaLisa.extent,
+                roiCallback:
+                {
+                    (index, rect) in
+                    return rect
+                },
+                inputImage: ciMonaLisa,
+                arguments: [])
+        }
+
+        let imageRep = NSCIImageRep(CIImage: filteredImage!)
         let final = NSImage(size: ciMonaLisa.extent.size)
         
         final.addRepresentation(imageRep)

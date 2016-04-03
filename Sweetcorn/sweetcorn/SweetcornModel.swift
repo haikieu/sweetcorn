@@ -25,7 +25,7 @@ import Cocoa
 class SweetcornNode
 {
     var type: SweetcornNodeType
-    
+  
     var position: CGPoint
     var inputs: [InputIndex: SweetcornNode]
     
@@ -67,6 +67,8 @@ class SweetcornModel
     var glslLines = [String]()
     var draggingNodeTypeName: String?
     
+    var mode: Mode
+    
     let nodeTypes = [smoothstepNodeType,
         addNodeType,
         subtractNodeType,
@@ -94,6 +96,8 @@ class SweetcornModel
     
     init()
     {
+        mode = .Color
+        
         let inputNode = SweetcornNode(type: inputNodeType, position: CGPoint(x: 20, y: 400))
 
         let inputs = [
@@ -109,14 +113,14 @@ class SweetcornModel
         updateGLSL()
     }
     
-    func nodeTypeForName(name: String) -> SweetcornNodeType?
+    func nodeTypeForName(name: String, mode: Mode = .Color) -> SweetcornNodeType?
     {
         switch name
         {
         case "Input":
             return inputNodeType
         case "Output":
-            return outputNodeType
+            return mode == .Warp ? outputWarpNodeType : outputNodeType
         default:
             return nodeTypes.filter({$0.name == name}).first
         }
@@ -155,7 +159,16 @@ class SweetcornModel
         glslLines = [String]()
         generateGLSLForNode(outputNode)
         
-        let glslString = "kernel vec4 color(__sample pixel)\n{\n" + glslLines.reduce("", combine: +) + "}"
+        let glslString:String
+
+        switch mode
+        {
+        case .Color:
+            glslString = "kernel vec4 color(__sample pixel)\n{\n" + glslLines.reduce("", combine: +) + "}"
+        case .Warp:
+            glslString = "kernel vec2 warp()\n{\n" + glslLines.reduce("", combine: +) + "}"
+        }
+        
      
         filteringDelegate?.glslDidUpdate(glslString)
     }
@@ -206,19 +219,38 @@ class SweetcornModel
     // MARK: Saving and opening...
     // TODO: Refactor these monster functions!
     
-    func newDocument()
+    func newDocument(mode: Mode)
     {
-        let inputNode = SweetcornNode(type: inputNodeType, position: CGPoint(x: 20, y: 400))
+        self.mode = mode
         
-        let inputs = [
-            InputIndex(sourceIndex: 0, targetIndex: 0): inputNode,
-            InputIndex(sourceIndex: 1, targetIndex: 1): inputNode,
-            InputIndex(sourceIndex: 2, targetIndex: 2): inputNode
-        ]
+        switch mode
+        {
+        case .Color:
+            let inputNode = SweetcornNode(type: inputNodeType, position: CGPoint(x: 20, y: 400))
+            
+            let inputs = [
+                InputIndex(sourceIndex: 0, targetIndex: 0): inputNode,
+                InputIndex(sourceIndex: 1, targetIndex: 1): inputNode,
+                InputIndex(sourceIndex: 2, targetIndex: 2): inputNode
+            ]
+            
+            let outputNode = SweetcornNode(type: outputNodeType, position: CGPoint(x: 380, y: 300), inputs: inputs)
+            
+            nodes = [inputNode, outputNode]
+        case .Warp:
+            let inputNode = SweetcornNode(type: destCoordType, position: CGPoint(x: 20, y: 400))
+            
+            let inputs = [
+                InputIndex(sourceIndex: 0, targetIndex: 0): inputNode,
+                InputIndex(sourceIndex: 1, targetIndex: 1): inputNode
+            ]
+            
+            let outputNode = SweetcornNode(type: outputWarpNodeType, position: CGPoint(x: 380, y: 300), inputs: inputs)
+            
+            nodes = [inputNode, outputNode]
+        }
         
-        let outputNode = SweetcornNode(type: outputNodeType, position: CGPoint(x: 380, y: 300), inputs: inputs)
-        
-        nodes = [inputNode, outputNode]
+
         
         nodeInterfaceDelegate?.refresh()
         updateGLSL()
@@ -237,6 +269,11 @@ class SweetcornModel
             dict["floatValue"] = node.floatValue
             dict["positionx"] = node.position.x
             dict["positiony"] = node.position.y
+            
+            if node.type.name == "Output"
+            {
+                dict["mode"] = mode.rawValue
+            }
 
             var inputs = [[String: AnyObject]]()
             
@@ -338,6 +375,8 @@ class SweetcornModel
             return
         }
 
+        mode = .Color
+        
         if let jsonArray = jsonObject as? NSArray
         {
             nodes.removeAll()
@@ -345,11 +384,16 @@ class SweetcornModel
             
             for node in jsonArray
             {
-                let nodeType = nodeTypeForName(String(node["type"] as! NSString))!
+                if let modeName = node["mode"] as? String, mode = Mode(rawValue: modeName)
+                {
+                    self.mode = mode
+                }
+                
+                let nodeType = nodeTypeForName(String(node["type"] as! NSString), mode: mode)!
                 let nodeFloatValue = node["floatValue"] as! Float
                 let nodePositionX = CGFloat(node["positionx"] as! NSNumber)
                 let nodePositionY = CGFloat(node["positiony"] as! NSNumber)
-              
+                
                 let newNode = SweetcornNode(type: nodeType, position: CGPoint(x: nodePositionX, y: nodePositionY))
                 newNode.floatValue = nodeFloatValue
                 
@@ -377,6 +421,13 @@ class SweetcornModel
             updateGLSL()
         }
     }
+}
+
+// -----
+
+enum Mode: String
+{
+    case Color, Warp
 }
 
 // -----
