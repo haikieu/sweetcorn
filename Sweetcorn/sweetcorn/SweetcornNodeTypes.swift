@@ -159,6 +159,11 @@ let destCoordNormType = SweetcornNodeType(name: "Norm Coord",
     outputLabels: ["x", "y"],
     glslString: "  vec2 $VAR_NAME = destCoord() / 640.0; \n")
 
+let symmetricCoordNormType = SweetcornNodeType(name: "[-1...+1] Coord",
+    inputLabels: [],
+    outputLabels: ["x", "y"],
+    glslString: "  vec2 $VAR_NAME = ((destCoord() / 640.0) * 2.0) - 1.0; \n")
+
 let destCoordType = SweetcornNodeType(name: "Coord",
     inputLabels: [],
     outputLabels: ["x", "y"],
@@ -168,6 +173,23 @@ let moduloNodeType =  SweetcornNodeType(name: "Modulo",
     inputLabels: ["x", "y"],
     outputLabels: ["mod(x, y)"],
     glslString: "  float $VAR_NAME = mod($0, $1); \n")
+
+// -----
+
+let reflectNodeType = SweetcornNodeType(name: "Reflect",
+                                        inputLabels: ["Incident x", "Incident y", "Incident z", "Normal x", "Normal y", "Normal z"],
+                                        outputLabels: ["Reflect x", "Reflect y", "Reflect z"],
+                                        glslString: "  vec3 $VAR_NAME = reflect(vec3($0, $1, $2), vec3($3, $4, $5)); \n")
+
+let refractNodeType = SweetcornNodeType(name: "Refract",
+                                        inputLabels: ["Incident x", "Incident y", "Incident z", "Normal x", "Normal y", "Normal z", "Refractive Index"],
+                                        outputLabels: ["Reflect x", "Reflect y", "Reflect z"],
+                                        glslString: "  vec3 $VAR_NAME = refract(vec3($0, $1, $2), vec3($3, $4, $5), $6); \n")
+
+let normalizeNodeType = SweetcornNodeType(name: "Normalize",
+                                        inputLabels: ["x", "y", "z"],
+                                        outputLabels: ["x", "y", "z"],
+                                        glslString: "  vec3 $VAR_NAME = normalize(vec3($0, $1, $2)); \n")
 
 // -----
 

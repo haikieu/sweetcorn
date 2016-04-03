@@ -92,7 +92,11 @@ class SweetcornModel
         ceilNodeType,
         floorNodeType,
         lengthNodeType, 
-        squareRootNodeType].sort({$0.name < $1.name})
+        squareRootNodeType,
+        reflectNodeType,
+        refractNodeType, 
+        normalizeNodeType,
+        symmetricCoordNormType].sort({$0.name < $1.name})
     
     init()
     {
