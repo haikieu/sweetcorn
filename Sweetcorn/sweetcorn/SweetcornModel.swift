@@ -82,6 +82,7 @@ class SweetcornModel
         numericNodeType,
         sinNodeType,
         cosNodeType,
+        atanNodeType, 
         destCoordType,
         moduloNodeType,
         clampNodeType,

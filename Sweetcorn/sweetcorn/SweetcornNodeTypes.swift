@@ -113,6 +113,12 @@ let cosNodeType = SweetcornNodeType(name: "Cosine",
     outputLabels: ["cos(x)"],
     glslString: "  float $VAR_NAME = cos($0); \n")
 
+let atanNodeType = SweetcornNodeType(name: "Arc Tangent",
+                                     inputLabels: ["x", "y"],
+                                     outputLabels: ["atan(x, y)"],
+                                     glslString: "  float $VAR_NAME = atan($0, $1); \n")
+
+
 // -----
 
 let smoothstepNodeType = SweetcornNodeType(name: "Smoothstep",
