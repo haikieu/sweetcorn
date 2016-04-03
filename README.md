@@ -3,9 +3,11 @@ Node based CIKernel creation
 
 ![/Sweetcorn/sweetcorn.png](/Sweetcorn/sweetcorn.png)
 
+![/Sweetcorn/sweetcornwarp.png](/Sweetcorn/sweetcornwarp.png)
+
 ## Introduction
 
-*Sweetcorn* is an OS X app which implements a node based user interface to create Core Image Shader Language code. The resulting code can be used as the basis for custom Core Image filters for either OS X or iOS. Currently, Sweetcorn creates code for both `CIColorKernel` and `CIWarpKernel` based filters.
+*Sweetcorn* is an OS X app which implements a node based user interface to create Core Image Kernel Language code. The resulting code can be used as the basis for custom Core Image filters for either OS X or iOS. Currently, Sweetcorn creates code for both `CIColorKernel` and `CIWarpKernel` based filters.
 
 ## Usage
 
