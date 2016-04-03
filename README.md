@@ -67,7 +67,7 @@ If you want to learn more about Core Image filters using custom kernels and how 
 
 * March 17, 2016 - Added icons. Added length, power, fractional, ceiling and floor functions. Added new _vignette_ project example.
 
-* April 3, 2016 - Added support for warp kernels, added carnival mirror project 
+* April 3, 2016 - Added support for warp kernels, added carnival mirror project. Added reflect, refact and normalize node types. Added refraction example project. 
 
 
 ## Acknowledgements
