@@ -1,0 +1,186 @@
+[
+  {
+    "type" : "Input",
+    "positionx" : 20,
+    "inputs" : [
+
+    ],
+    "positiony" : 400,
+    "index" : 0,
+    "floatValue" : 0
+  },
+  {
+    "inputs" : [
+      {
+        "sourceIndex" : 1,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 5
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 2
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 2,
+        "inputNodeIndex" : 7
+      }
+    ],
+    "mode" : "Color",
+    "index" : 1,
+    "positionx" : 958,
+    "floatValue" : 0,
+    "positiony" : 398,
+    "type" : "Output"
+  },
+  {
+    "type" : "HSV to RGB",
+    "positionx" : 477.515625,
+    "inputs" : [
+      {
+        "sourceIndex" : 1,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 3
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 3
+      },
+      {
+        "sourceIndex" : 2,
+        "targetIndex" : 2,
+        "inputNodeIndex" : 3
+      }
+    ],
+    "positiony" : 523.6875,
+    "index" : 2,
+    "floatValue" : 0
+  },
+  {
+    "type" : "RGB to HSV",
+    "positionx" : 267.0390625,
+    "inputs" : [
+      {
+        "sourceIndex" : 1,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 0
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 0
+      },
+      {
+        "sourceIndex" : 2,
+        "targetIndex" : 2,
+        "inputNodeIndex" : 0
+      }
+    ],
+    "positiony" : 506.453125,
+    "index" : 3,
+    "floatValue" : 0
+  },
+  {
+    "type" : "RGB to CMYK",
+    "positionx" : 206.5078125,
+    "inputs" : [
+      {
+        "sourceIndex" : 1,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 0
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 0
+      },
+      {
+        "sourceIndex" : 2,
+        "targetIndex" : 2,
+        "inputNodeIndex" : 0
+      }
+    ],
+    "positiony" : 216.93359375,
+    "index" : 4,
+    "floatValue" : 0
+  },
+  {
+    "type" : "CMYK to RGB",
+    "positionx" : 432.73046875,
+    "inputs" : [
+      {
+        "sourceIndex" : 3,
+        "targetIndex" : 3,
+        "inputNodeIndex" : 4
+      },
+      {
+        "sourceIndex" : 1,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 4
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 4
+      },
+      {
+        "sourceIndex" : 2,
+        "targetIndex" : 2,
+        "inputNodeIndex" : 4
+      }
+    ],
+    "positiony" : 268.95703125,
+    "index" : 5,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Add",
+    "positionx" : 654.41796875,
+    "inputs" : [
+      {
+        "sourceIndex" : 2,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 2
+      },
+      {
+        "sourceIndex" : 2,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 5
+      }
+    ],
+    "positiony" : 396.19140625,
+    "index" : 6,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Divide",
+    "positionx" : 825.5078125,
+    "inputs" : [
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 0,
+        "inputNodeIndex" : 6
+      },
+      {
+        "sourceIndex" : 0,
+        "targetIndex" : 1,
+        "inputNodeIndex" : 8
+      }
+    ],
+    "positiony" : 264.35546875,
+    "index" : 7,
+    "floatValue" : 0
+  },
+  {
+    "type" : "Float",
+    "positionx" : 595.07421875,
+    "inputs" : [
+
+    ],
+    "positiony" : 113.0703125,
+    "index" : 8,
+    "floatValue" : 2
+  }
+]

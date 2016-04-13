@@ -97,7 +97,11 @@ class SweetcornModel
         reflectNodeType,
         refractNodeType, 
         normalizeNodeType,
-        symmetricCoordNormType].sort({$0.name < $1.name})
+        symmetricCoordNormType,
+        rgbToCMYKNodeType,
+        cmykToRGBNodeType,
+        rgbToHSVNodeType,
+        hsvToRGBNodeType].sort({$0.name < $1.name})
     
     init()
     {
@@ -162,6 +166,7 @@ class SweetcornModel
         }
         
         glslLines = [String]()
+        
         generateGLSLForNode(outputNode)
         
         let glslString:String
@@ -174,8 +179,9 @@ class SweetcornModel
             glslString = "kernel vec2 warp()\n{\n" + glslLines.reduce("", combine: +) + "}"
         }
         
-     
-        filteringDelegate?.glslDidUpdate(glslString)
+        let includes = Set<String>(nodes.filter({ $0.type.includeFunction != nil }).map({ $0.type.includeFunction! })).reduce("", combine: +)
+        
+        filteringDelegate?.glslDidUpdate(includes + glslString)
     }
     
     func generateGLSLForNode(node: SweetcornNode)

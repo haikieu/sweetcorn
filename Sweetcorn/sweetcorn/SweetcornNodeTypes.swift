@@ -199,12 +199,91 @@ let normalizeNodeType = SweetcornNodeType(name: "Normalize",
 
 // -----
 
+let rgbToCMYKNodeType = SweetcornNodeType(name: "RGB to CMYK",
+                                          inputLabels: ["r", "g", "b"],
+                                          outputLabels: ["c", "m", "y", "k"],
+                                          glslString: "  vec4 $VAR_NAME = rgbToCMYK(vec3($0, $1, $2)); \n",
+                                          includeFunction: rgbToCMYK)
+                                        
+
+let rgbToCMYK = "vec4 rgbToCMYK(vec3 rgb) \n" +
+    "{ \n" +
+    "   float k = 1.0 - max(max(rgb.r, rgb.g), rgb.b); \n" +
+    "   float c = (1.0 - rgb.r - k) / (1.0 - k);  \n" +
+    "   float m = (1.0 - rgb.g - k) / (1.0 - k); \n"  +
+    "   float y = (1.0 - rgb.b - k) / (1.0 - k); \n"  +
+    
+    "   return vec4(c, m, y, k); \n" +
+    "} \n\n"
+
+// ----
+
+let cmykToRGBNodeType = SweetcornNodeType(name: "CMYK to RGB",
+                                          inputLabels: ["c", "m", "y", "k"],
+                                          outputLabels: ["r", "g", "b"],
+                                          glslString: "  vec3 $VAR_NAME = cmykToRGB($0, $1, $2, $3); \n",
+                                          includeFunction: cmykToRGB)
+
+let cmykToRGB = "vec3 cmykToRGB(float c, float m, float y, float k) \n" +
+    "{ \n" +
+    "    float r = (1.0 - c) * (1.0 - k); \n" +
+    "    float g = (1.0 - m) * (1.0 - k); \n" +
+    "    float b = (1.0 - y) * (1.0 - k); \n" +
+    "    return vec3(r, g, b); \n" +
+    "} \n\n"
+
+// ----
+
+let rgbToHSVNodeType = SweetcornNodeType(name: "RGB to HSV",
+                                          inputLabels: ["r", "g", "b"],
+                                          outputLabels: ["h", "s", "v"],
+                                          glslString: "  vec3 $VAR_NAME = rgbToHSV(vec3($0, $1, $2)); \n",
+                                          includeFunction: rgbToHSV)
+
+let rgbToHSV = "vec3 rgbToHSV(vec3 c) \n" +
+    "{ \n" +
+    "    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0); \n" +
+    "    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g)); \n" +
+    "    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r)); \n" +
+    "    float d = q.x - min(q.w, q.y); \n" +
+    "    float e = 1.0e-10; \n" +
+    "    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x); \n" +
+    "} \n\n"
+
+// ----
+
+let hsvToRGBNodeType = SweetcornNodeType(name: "HSV to RGB",
+                                         inputLabels: ["h", "s", "v"],
+                                         outputLabels: ["r", "g", "b"],
+                                         glslString: "  vec3 $VAR_NAME = hsvToRGB(vec3($0, $1, $2)); \n",
+                                         includeFunction: hsvToRGB)
+
+let hsvToRGB = "vec3 hsvToRGB(vec3 c) \n" +
+    "{ \n" +
+    "    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0); \n" +
+    "    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www); \n" +
+    "    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y); \n" +
+    "} \n\n"
+
+// ----
+
 struct SweetcornNodeType
 {
+    init(name: String, inputLabels: [String], outputLabels: [String], glslString: String, includeFunction: String? = nil)
+    {
+        self.name = name
+        self.inputLabels = inputLabels
+        self.outputLabels = outputLabels
+        self.glslString = glslString
+        self.includeFunction = includeFunction
+    }
+
+    
     let name: String
     
     let inputLabels: [String]
     let outputLabels: [String]
     
     let glslString: String
+    let includeFunction: String?
 }

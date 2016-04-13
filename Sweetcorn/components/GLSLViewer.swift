@@ -24,6 +24,7 @@ class GLSLViewer: NSView
 {
     let imageView = NSImageView()
     let codeView = NSTextField()
+    let textScrollView = NSScrollView()
     
     let monalisa = NSImage(named: "monalisa.jpg")!
     let ciMonaLisa: CIImage
@@ -35,6 +36,11 @@ class GLSLViewer: NSView
             if let glslString = glslString
             {
                 codeView.stringValue = glslString
+                
+                codeView.frame = CGRect(x: 0,
+                                        y: 0,
+                                        width: frame.width,
+                                        height: max(textScrollView.frame.height, codeView.intrinsicContentSize.height + 60))
             }
         }
     }
@@ -56,8 +62,11 @@ class GLSLViewer: NSView
         codeView.backgroundColor = NSColor.darkGrayColor()
         codeView.maximumNumberOfLines = 0
   
+        addSubview(textScrollView)
         addSubview(imageView)
-        addSubview(codeView)
+        
+        textScrollView.documentView = codeView
+        textScrollView.hasVerticalScroller = true
         
         shadow = NSShadow()
         shadow?.shadowColor = NSColor.blackColor()
@@ -91,10 +100,15 @@ class GLSLViewer: NSView
                 width: frame.width,
                 height: frame.width)
             
-            codeView.frame = CGRect(x: 0,
+            textScrollView.frame = CGRect(x: 0,
                 y: 0,
                 width: frame.width,
                 height: frame.height - frame.width)
+            
+            codeView.frame = CGRect(x: 0,
+                                    y: 0,
+                                    width: frame.width,
+                                    height: max(textScrollView.frame.height, codeView.intrinsicContentSize.height))
         }
     }
 }
