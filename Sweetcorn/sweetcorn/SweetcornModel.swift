@@ -101,7 +101,8 @@ class SweetcornModel
         rgbToCMYKNodeType,
         cmykToRGBNodeType,
         rgbToHSVNodeType,
-        hsvToRGBNodeType].sort({$0.name < $1.name})
+        hsvToRGBNodeType,
+        lumaNodeType].sort({$0.name < $1.name})
     
     init()
     {

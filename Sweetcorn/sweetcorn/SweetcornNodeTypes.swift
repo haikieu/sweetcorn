@@ -267,6 +267,11 @@ let hsvToRGB = "vec3 hsvToRGB(vec3 c) \n" +
 
 // ----
 
+let lumaNodeType = SweetcornNodeType(name: "RGB to Luma",
+                                         inputLabels: ["r", "g", "b"],
+                                         outputLabels: ["luma"],
+                                         glslString: "  float $VAR_NAME = dot(vec3($0, $1, $2), vec3(0.2126, 0.7152, 0.0722)); \n")
+
 struct SweetcornNodeType
 {
     init(name: String, inputLabels: [String], outputLabels: [String], glslString: String, includeFunction: String? = nil)
