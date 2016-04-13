@@ -69,6 +69,9 @@ If you want to learn more about Core Image filters using custom kernels and how 
 
 * April 3, 2016 - Added support for warp kernels, added carnival mirror project. Added reflect, refact and normalize node types. Added refraction example project. 
 
+* April 12, 2016 - Added new node types for RGB -> CMYK -> RGB and HSV -> RGB -> HSV. These node types use a new property `includeFunction` which embeds functions (for example `cmykToRGB` and `rgbToHSV()`) in the code. Embedded the code viewer in a scroll view for long kernels :)
+
+
 
 ## Acknowledgements
 
