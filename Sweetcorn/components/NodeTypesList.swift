@@ -23,7 +23,7 @@ import Cocoa
 
 class NodeTypesList: NSScrollView
 {
-    let tableView = TableViewNoDragImage()
+    @objc let tableView = TableViewNoDragImage()
     
     let model: SweetcornModel
     
@@ -31,23 +31,23 @@ class NodeTypesList: NSScrollView
     {
         self.model = model
         
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
-        let column = NSTableColumn(identifier: "")
+        let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: ""))
         tableView.addTableColumn(column)
 
         tableView.headerView = nil
-        tableView.backgroundColor = NSColor.darkGrayColor()
+        tableView.backgroundColor = NSColor.darkGray
         
-        tableView.setDataSource(self)
-        tableView.setDelegate(self)
+        tableView.dataSource = self
+        tableView.delegate = self
         
         documentView = tableView
         
         horizontalScroller = nil
         
         shadow = NSShadow()
-        shadow?.shadowColor = NSColor.blackColor()
+        shadow?.shadowColor = NSColor.black
         shadow?.shadowBlurRadius = 5
         shadow?.shadowOffset = NSSize(width: 0, height: 0)
     }
@@ -60,33 +60,33 @@ class NodeTypesList: NSScrollView
 
 class TableViewNoDragImage: NSTableView
 {
-    override func dragImageForRowsWithIndexes(dragRows: NSIndexSet, tableColumns: [NSTableColumn], event dragEvent: NSEvent, offset dragImageOffset: NSPointPointer) -> NSImage {
+    override func dragImageForRows(with dragRows: IndexSet, tableColumns: [NSTableColumn], event dragEvent: NSEvent, offset dragImageOffset: NSPointPointer) -> NSImage {
         return NSImage()
     }
 }
 
 extension NodeTypesList: NSTableViewDataSource, NSTableViewDelegate
 {
-    func tableView(tableView: NSTableView, writeRowsWithIndexes rowIndexes: NSIndexSet, toPasteboard pboard: NSPasteboard) -> Bool
+    func tableView(_ tableView: NSTableView, writeRowsWith rowIndexes: IndexSet, to pboard: NSPasteboard) -> Bool
     {
-        pboard.addTypes(["DraggingSweetcornNodeType"], owner: self)
+        pboard.addTypes([NSPasteboard.PasteboardType(rawValue: "DraggingSweetcornNodeType")], owner: self)
         
-        model.draggingNodeTypeName = model.nodeTypes[rowIndexes.firstIndex].name
+        model.draggingNodeTypeName = model.nodeTypes[rowIndexes.first!].name
         
         return true
     }
     
-    func tableView(tableView: NSTableView, shouldEditTableColumn tableColumn: NSTableColumn?, row: Int) -> Bool
+    func tableView(_ tableView: NSTableView, shouldEdit tableColumn: NSTableColumn?, row: Int) -> Bool
     {
         return false
     }
     
-    func numberOfRowsInTableView(tableView: NSTableView) -> Int
+    func numberOfRows(in tableView: NSTableView) -> Int
     {
         return model.nodeTypes.count
     }
     
-    func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject?
+    func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any?
     {
         return model.nodeTypes[row].name
     }

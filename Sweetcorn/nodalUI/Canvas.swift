@@ -22,12 +22,12 @@ import Cocoa
 
 class Canvas: NSView, NodeInterfaceDelegate
 {
-    let curvesLayer = CAShapeLayer()
-    let relationshipCreationLayer = CAShapeLayer()
+    @objc let curvesLayer = CAShapeLayer()
+    @objc let relationshipCreationLayer = CAShapeLayer()
     
     let model: SweetcornModel
     
-    let draggingWidget = TitleLabel()
+    @objc let draggingWidget = TitleLabel()
     
     required init(model: SweetcornModel, frame frameRect: NSRect)
     {
@@ -35,7 +35,7 @@ class Canvas: NSView, NodeInterfaceDelegate
         
         super.init(frame: frameRect)
         
-        registerForDraggedTypes(["DraggingSweetcornNodeType"])
+        registerForDraggedTypes([NSPasteboard.PasteboardType(rawValue: "DraggingSweetcornNodeType")])
         
         let checkerboard = CIFilter(name: "CICheckerboardGenerator",
             withInputParameters: [
@@ -48,12 +48,12 @@ class Canvas: NSView, NodeInterfaceDelegate
         wantsLayer = true
         
         layer?.addSublayer(curvesLayer)
-        curvesLayer.strokeColor = NSColor.lightGrayColor().CGColor
+        curvesLayer.strokeColor = NSColor.lightGray.cgColor
         curvesLayer.fillColor = nil
         curvesLayer.lineWidth = 2
         
         layer?.addSublayer(relationshipCreationLayer)
-        relationshipCreationLayer.strokeColor = NSColor.magentaColor().CGColor
+        relationshipCreationLayer.strokeColor = NSColor.magenta.cgColor
         relationshipCreationLayer.lineDashPattern = [5,5]
         relationshipCreationLayer.fillColor = nil
         relationshipCreationLayer.lineWidth = 2
@@ -79,21 +79,21 @@ class Canvas: NSView, NodeInterfaceDelegate
     
     var relationshipTarget: (node: SweetcornNode, index: Int)?
     
-    override func mouseDragged(theEvent: NSEvent)
+    override func mouseDragged(with theEvent: NSEvent)
     {
         guard let relationshipCreationSource = relationshipCreationSource else
         {
             return
         }
         
-        let mouseLocation = convertPoint(theEvent.locationInWindow, fromView: nil)
+        let mouseLocation = convert(theEvent.locationInWindow, from: nil)
         
         
-        let path = CGPathCreateMutable()
+        let path = CGMutablePath()
         let sourceNode = relationshipCreationSource.node
         let sourceIndex = relationshipCreationSource.index
         
-        let sourceY = NodeWidget.verticalPositionForLabel(sourceIndex, widgetType: .Output, node: sourceNode)
+        let sourceY = NodeWidget.verticalPositionForLabel(sourceIndex, widgetType: .output, node: sourceNode)
         
 
         let startPoint = CGPoint(x: mouseLocation.x,
@@ -109,10 +109,10 @@ class Canvas: NSView, NodeInterfaceDelegate
     }
     
     // Creates the relationship. TODO - move logic to `SweetcornModel`
-    override func mouseUp(theEvent: NSEvent)
+    override func mouseUp(with theEvent: NSEvent)
     {
         guard let relationshipCreationSource = relationshipCreationSource,
-            relationshipTarget = relationshipTarget else
+            let relationshipTarget = relationshipTarget else
         {
             self.relationshipCreationSource = nil
             self.relationshipTarget = nil
@@ -137,7 +137,7 @@ class Canvas: NSView, NodeInterfaceDelegate
         model.updateGLSL()
     }
 
-    func refresh()
+    @objc func refresh()
     {
         subviews.forEach
         {
@@ -147,7 +147,7 @@ class Canvas: NSView, NodeInterfaceDelegate
         updateUI()
     }
     
-    func updateUI()
+    @objc func updateUI()
     {
         for node in model.nodes
         {
@@ -162,19 +162,19 @@ class Canvas: NSView, NodeInterfaceDelegate
         renderRelationships()
     }
     
-    func renderRelationships()
+    @objc func renderRelationships()
     {
-        let path = CGPathCreateMutable()
+        let path = CGMutablePath()
         
         for node in model.nodes
         {
             for input in node.inputs
             {
                 let sourceY = NodeWidget.verticalPositionForLabel(input.0.sourceIndex,
-                    widgetType: .Output,
+                    widgetType: .output,
                     node: input.1)
                 let targetY = NodeWidget.verticalPositionForLabel(input.0.targetIndex,
-                    widgetType: .Input,
+                    widgetType: .input,
                     node: node)
              
                 let startPoint = CGPoint(x: node.position.x,
@@ -191,7 +191,7 @@ class Canvas: NSView, NodeInterfaceDelegate
         curvesLayer.path = path
     }
     
-    class func appendConnectingCurveToPath(path: CGMutablePath, startPoint: CGPoint, endPoint: CGPoint)
+    @objc class func appendConnectingCurveToPath(_ path: CGMutablePath, startPoint: CGPoint, endPoint: CGPoint)
     {
         let offset = abs(startPoint.x - endPoint.x) / 3.0
         
@@ -200,56 +200,55 @@ class Canvas: NSView, NodeInterfaceDelegate
         let controlPointTwo = CGPoint(x: startPoint.x - offset,
             y: endPoint.y)
         
-        CGPathMoveToPoint(path, nil,
-            startPoint.x, startPoint.y)
+        path.move(to: CGPoint(x: startPoint.x, y: startPoint.y))
         
-        CGPathAddCurveToPoint(path, nil,
-            controlPointOne.x, controlPointOne.y,
-            controlPointTwo.x, controlPointTwo.y,
-            endPoint.x, endPoint.y)
+        path.addCurve(to: CGPoint(x: endPoint.x, y: endPoint.y),
+                      control1: CGPoint(x: controlPointOne.x, y: controlPointOne.y),
+                      control2: CGPoint(x: controlPointTwo.x, y: controlPointTwo.y))
+        
     }
 }
 
 extension Canvas // Dropping support
 {
-    override func draggingEntered(sender: NSDraggingInfo) -> NSDragOperation
+    override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation
     {
-        let draggingLocation = NSPoint(x: convertPoint(sender.draggingLocation(), fromView: nil).x - 50,
-            y: convertPoint(sender.draggingLocation(), fromView: nil).y - 10)
+        let draggingLocation = NSPoint(x: convert(sender.draggingLocation(), from: nil).x - 50,
+            y: convert(sender.draggingLocation(), from: nil).y - 10)
         
         addSubview(draggingWidget)
-        draggingWidget.hidden = false
+        draggingWidget.isHidden = false
         draggingWidget.stringValue = model.draggingNodeTypeName ?? ""
         draggingWidget.frame = CGRect(origin: draggingLocation,
             size: CGSize(width: 100, height: 20))
         
-        return NSDragOperation.Generic
+        return NSDragOperation.generic
     }
     
-    override func draggingUpdated(sender: NSDraggingInfo) -> NSDragOperation
+    override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation
     {
-        let draggingLocation = NSPoint(x: convertPoint(sender.draggingLocation(), fromView: nil).x - 50,
-            y: convertPoint(sender.draggingLocation(), fromView: nil).y - 10)
+        let draggingLocation = NSPoint(x: convert(sender.draggingLocation(), from: nil).x - 50,
+            y: convert(sender.draggingLocation(), from: nil).y - 10)
         
         draggingWidget.frame = CGRect(origin: draggingLocation,
             size: CGSize(width: 100, height: 20))
         
-        return NSDragOperation.Generic
+        return NSDragOperation.generic
     }
     
     // Creates new node after drop
     // TODO - move logic to model
-    override func performDragOperation(sender: NSDraggingInfo) -> Bool
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool
     {
-        draggingWidget.hidden = true
+        draggingWidget.isHidden = true
 
         if let draggingNodeTypeName = model.draggingNodeTypeName,
-            nodeType = model.nodeTypeForName(draggingNodeTypeName)
+            let nodeType = model.nodeTypeForName(draggingNodeTypeName)
         {
-            let node = SweetcornNode(type: nodeType, position: CGPointZero)
+            let node = SweetcornNode(type: nodeType, position: CGPoint.zero)
             
-            let draggingLocation = NSPoint(x: convertPoint(sender.draggingLocation(), fromView: nil).x - 50,
-                y: convertPoint(sender.draggingLocation(), fromView: nil).y + 10 - NodeWidget.widgetHeightForNode(node))
+            let draggingLocation = NSPoint(x: convert(sender.draggingLocation(), from: nil).x - 50,
+                y: convert(sender.draggingLocation(), from: nil).y + 10 - NodeWidget.widgetHeightForNode(node))
             
             node.position = draggingLocation
             

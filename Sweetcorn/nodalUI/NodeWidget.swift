@@ -24,33 +24,33 @@ let rowHeight: CGFloat = 20
 
 class NodeWidget: NSView
 {
-    let canvas: Canvas
+    @objc let canvas: Canvas
     let node: SweetcornNode
     
-    let titleLabel = TitleLabel()
-    let deleteButton = NSButton()
+    @objc let titleLabel = TitleLabel()
+    @objc let deleteButton = NSButton()
     
     required init(canvas: Canvas, node: SweetcornNode)
     {
         self.canvas = canvas
         self.node = node
         
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
 
         titleLabel.stringValue = node.type.name
         
         if node.type.name == "Input" || node.type.name == "Output"
         {
-            titleLabel.backgroundColor = NSColor.blueColor()
+            titleLabel.backgroundColor = NSColor.blue
         }
         
         addSubview(titleLabel)
        
-        node.type.inputLabels.enumerate().forEach{
-            addLabelWidget($0, name: $1, widgetType: .Input)}
+        node.type.inputLabels.enumerated().forEach{
+            addLabelWidget($0, name: $1, widgetType: .input)}
         
-        node.type.outputLabels.enumerate().forEach{
-            addLabelWidget($0, name: $1, widgetType: .Output)}
+        node.type.outputLabels.enumerated().forEach{
+            addLabelWidget($0, name: $1, widgetType: .output)}
         
         titleLabel.frame = CGRect(x: 0, y: NodeWidget.widgetHeightForNode(node) - rowHeight,
             width: 100,
@@ -79,7 +79,7 @@ class NodeWidget: NSView
         }
     }
     
-    func deleteNode()
+    @objc func deleteNode()
     {
         model.deleteNode(node)
         
@@ -88,15 +88,15 @@ class NodeWidget: NSView
         canvas.renderRelationships()
     }
     
-    func addLabelWidget(index: Int, name: String, widgetType: LabelWidgetType)
+    func addLabelWidget(_ index: Int, name: String, widgetType: LabelWidgetType)
     {
         let y = NodeWidget.verticalPositionForLabel(index, widgetType: widgetType, node:  node)
         
-        let label = widgetType == .Input ?
+        let label = widgetType == .input ?
             ReadonlyLabel(index: index, node: node, canvas: canvas) :
             OutputWidget(index: index, mouseDownCallback: mouseDownHandler, canvas: canvas)
         
-        label.alignment = widgetType == .Input ? .Left : .Right
+        label.alignment = widgetType == .input ? .left : .right
         
         label.frame = CGRect(x: 0, y: y, width: 100, height: rowHeight)
         
@@ -112,7 +112,7 @@ class NodeWidget: NSView
         addSubview(label)
     }
     
-    func mouseDownHandler(index: Int) -> Void
+    @objc func mouseDownHandler(_ index: Int) -> Void
     {
         canvas.relationshipCreationSource = (node: node, index: index)
     }
@@ -127,7 +127,7 @@ class NodeWidget: NSView
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func mouseDragged(theEvent: NSEvent)
+    override func mouseDragged(with theEvent: NSEvent)
     {        
         frame = frame.offsetBy(dx: theEvent.deltaX, dy: -theEvent.deltaY)
         
@@ -136,16 +136,16 @@ class NodeWidget: NSView
         canvas.renderRelationships()
     }
     
-    class func verticalPositionForLabel(index: Int, widgetType: LabelWidgetType, node: SweetcornNode) -> CGFloat
+    class func verticalPositionForLabel(_ index: Int, widgetType: LabelWidgetType, node: SweetcornNode) -> CGFloat
     {
-        let verticalOffset = widgetType == .Input ?
+        let verticalOffset = widgetType == .input ?
             NodeWidget.widgetHeightForNode(node) - rowHeight :
             NodeWidget.widgetHeightForNode(node) - rowHeight - CGFloat(node.type.inputLabels.count) * rowHeight
         
         return verticalOffset - (rowHeight * CGFloat(index)) - rowHeight - (node.type.name == "Float" ? 20 : 0)
     }
     
-    class func widgetHeightForNode(node: SweetcornNode) -> CGFloat
+    class func widgetHeightForNode(_ node: SweetcornNode) -> CGFloat
     {
         return CGFloat((node.type.inputLabels.count + node.type.outputLabels.count) * 20) + rowHeight + (node.type.name == "Float" ? 20 : 0)
     }
@@ -163,10 +163,10 @@ class NumberEditor: NSTextField
         self.node = node
         self.model = model
         
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         
-        font = NSFont.userFixedPitchFontOfSize(NSFont.systemFontSize())
-        alignment = .Right
+        font = NSFont.userFixedPitchFont(ofSize: NSFont.systemFontSize)
+        alignment = .right
     }
 
     required init?(coder: NSCoder)
@@ -174,14 +174,14 @@ class NumberEditor: NSTextField
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func textDidChange(notification: NSNotification)
+    override func textDidChange(_ notification: Notification)
     {
         node.floatValue = floatValue
         
         model.updateGLSL()
     }
     
-    override func textDidEndEditing(notification: NSNotification)
+    override func textDidEndEditing(_ notification: Notification)
     {
         stringValue = "\(floatValue)"
         
@@ -196,9 +196,9 @@ class NumberEditor: NSTextField
 
 class ReadonlyLabel: NSTextField
 {
-    let index: Int
+    @objc let index: Int
     unowned let node: SweetcornNode
-    unowned let canvas: Canvas
+    @objc unowned let canvas: Canvas
     
     init(index: Int, node: SweetcornNode, canvas: Canvas)
     {
@@ -206,13 +206,13 @@ class ReadonlyLabel: NSTextField
         self.node = node
         self.canvas = canvas
         
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         
-        editable = false
-        bezeled = false
-        bordered = false
+        isEditable = false
+        isBezeled = false
+        isBordered = false
         
-        backgroundColor = NSColor.lightGrayColor()
+        backgroundColor = NSColor.lightGray
     
     }
 
@@ -221,9 +221,9 @@ class ReadonlyLabel: NSTextField
         didSet
         {
             let trackingArea = NSTrackingArea(rect: bounds,
-                options: [NSTrackingAreaOptions.MouseEnteredAndExited,
-                    NSTrackingAreaOptions.ActiveAlways,
-                    NSTrackingAreaOptions.EnabledDuringMouseDrag],
+                options: [NSTrackingArea.Options.mouseEnteredAndExited,
+                    NSTrackingArea.Options.activeAlways,
+                    NSTrackingArea.Options.enabledDuringMouseDrag],
                 owner: self,
                 userInfo: nil)
             
@@ -231,29 +231,29 @@ class ReadonlyLabel: NSTextField
         }
     }
     
-    override func mouseEntered(theEvent: NSEvent)
+    override func mouseEntered(with theEvent: NSEvent)
     {
         if canvas.relationshipCreationSource == nil
         {
             return
         }
         
-        textColor = NSColor.whiteColor()
+        textColor = NSColor.white
         
         if canvas.relationshipCreationSource!.node.isAscendant(node)
         {
-            backgroundColor = NSColor.redColor()
+            backgroundColor = NSColor.red
             return
         }
         
-        backgroundColor = NSColor.magentaColor()
+        backgroundColor = NSColor.magenta
         canvas.relationshipTarget = (index: index, node: node)
     }
     
-    override func mouseExited(theEvent: NSEvent)
+    override func mouseExited(with theEvent: NSEvent)
     {
-        backgroundColor = NSColor.lightGrayColor()
-        textColor = NSColor.blackColor()
+        backgroundColor = NSColor.lightGray
+        textColor = NSColor.black
         
         // canvas.relationshipTarget = nil
     }
@@ -272,13 +272,13 @@ class TitleLabel: NSTextField
     {
         super.init(frame: frameRect)
         
-        font = NSFont.boldSystemFontOfSize(12)
-        alignment = .Center
-        backgroundColor = NSColor.darkGrayColor()
-        textColor = NSColor.whiteColor()
-        editable = false
-        bezeled = false
-        bordered = false
+        font = NSFont.boldSystemFont(ofSize: 12)
+        alignment = .center
+        backgroundColor = NSColor.darkGray
+        textColor = NSColor.white
+        isEditable = false
+        isBezeled = false
+        isBordered = false
     }
 
     required init?(coder: NSCoder)
@@ -291,17 +291,17 @@ class TitleLabel: NSTextField
 
 class OutputWidget: NSButton
 {
-    let index: Int
-    let mouseDownCallback: (index: Int) -> Void
-    unowned let canvas: Canvas
+    @objc let index: Int
+    @objc let mouseDownCallback: (_ index: Int) -> Void
+    @objc unowned let canvas: Canvas
     
-    init(index: Int, mouseDownCallback: (index: Int) -> Void, canvas: Canvas)
+    @objc init(index: Int, mouseDownCallback: @escaping (_ index: Int) -> Void, canvas: Canvas)
     {
         self.index = index
         self.mouseDownCallback = mouseDownCallback
         self.canvas = canvas
         
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
     }
 
     required init?(coder: NSCoder)
@@ -309,21 +309,21 @@ class OutputWidget: NSButton
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func mouseDown(theEvent: NSEvent)
+    override func mouseDown(with theEvent: NSEvent)
     {
-        mouseDownCallback(index: index)
+        mouseDownCallback(index)
         
-        canvas.mouseDown(theEvent)
+        canvas.mouseDown(with: theEvent)
     }
     
-    override func mouseDragged(theEvent: NSEvent)
+    override func mouseDragged(with theEvent: NSEvent)
     {
-        canvas.mouseDragged(theEvent)
+        canvas.mouseDragged(with: theEvent)
     }
 
 }
 
 enum LabelWidgetType
 {
-    case Input, Output
+    case input, output
 }

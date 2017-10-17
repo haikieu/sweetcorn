@@ -22,14 +22,14 @@ import Cocoa
 
 class GLSLViewer: NSView
 {
-    let imageView = NSImageView()
-    let codeView = NSTextField()
-    let textScrollView = NSScrollView()
+    @objc let imageView = NSImageView()
+    @objc let codeView = NSTextField()
+    @objc let textScrollView = NSScrollView()
     
-    let monalisa = NSImage(named: "monalisa.jpg")!
-    let ciMonaLisa: CIImage
+    @objc let monalisa = NSImage(named: NSImage.Name(rawValue: "monalisa.jpg"))!
+    @objc let ciMonaLisa: CIImage
     
-    var glslString: String?
+    @objc var glslString: String?
     {
         didSet
         {
@@ -47,7 +47,7 @@ class GLSLViewer: NSView
     
     override init(frame frameRect: NSRect)
     {
-        let tiffData = monalisa.TIFFRepresentation!
+        let tiffData = monalisa.tiffRepresentation!
         let bitmap = NSBitmapImageRep(data: tiffData)
         ciMonaLisa = CIImage(bitmapImageRep: bitmap!)!
         
@@ -55,11 +55,11 @@ class GLSLViewer: NSView
         
         imageView.image = monalisa
         
-        codeView.font = NSFont.userFixedPitchFontOfSize(10)
-        codeView.editable = false
-        codeView.selectable = true
-        codeView.bordered = false
-        codeView.backgroundColor = NSColor.darkGrayColor()
+        codeView.font = NSFont.userFixedPitchFont(ofSize: 10)
+        codeView.isEditable = false
+        codeView.isSelectable = true
+        codeView.isBordered = false
+        codeView.backgroundColor = NSColor.darkGray
         codeView.maximumNumberOfLines = 0
   
         addSubview(textScrollView)
@@ -69,7 +69,7 @@ class GLSLViewer: NSView
         textScrollView.hasVerticalScroller = true
         
         shadow = NSShadow()
-        shadow?.shadowColor = NSColor.blackColor()
+        shadow?.shadowColor = NSColor.black
         shadow?.shadowBlurRadius = 5
         shadow?.shadowOffset = NSSize(width: 0, height: 0)
     }
@@ -79,16 +79,16 @@ class GLSLViewer: NSView
         fatalError("init(coder:) has not been implemented")
     }
     
-    func copyCode()
+    @objc func copyCode()
     {
         guard let glslString = glslString else
         {
             return
         }
         
-        let pasteboard = NSPasteboard.generalPasteboard()
+        let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
-        pasteboard.writeObjects([glslString])
+        pasteboard.writeObjects([glslString as NSPasteboardWriting])
     }
     
     override var frame: NSRect
@@ -115,7 +115,7 @@ class GLSLViewer: NSView
 
 extension GLSLViewer: FilteringDelegate
 {
-    func glslDidUpdate(glslString: String)
+    @objc func glslDidUpdate(_ glslString: String)
     {
         self.glslString = glslString
         
@@ -124,24 +124,24 @@ extension GLSLViewer: FilteringDelegate
         switch model.mode
         {
         case .Color:
-            let kernel = CIColorKernel(string: glslString)
+            let kernel = CIColorKernel(source: glslString)
             
-            filteredImage = kernel?.applyWithExtent(ciMonaLisa.extent, arguments: [ciMonaLisa])
+            filteredImage = kernel?.apply(extent: ciMonaLisa.extent, arguments: [ciMonaLisa])
             
         case .Warp:
-            let kernel = CIWarpKernel(string: glslString)
+            let kernel = CIWarpKernel(source: glslString)
             
-            filteredImage = kernel?.applyWithExtent(ciMonaLisa.extent,
+            filteredImage = kernel?.apply(extent: ciMonaLisa.extent,
                 roiCallback:
                 {
                     (index, rect) in
                     return rect
                 },
-                inputImage: ciMonaLisa,
+                image: ciMonaLisa,
                 arguments: [])
         }
 
-        let imageRep = NSCIImageRep(CIImage: filteredImage!)
+        let imageRep = NSCIImageRep(ciImage: filteredImage!)
         let final = NSImage(size: ciMonaLisa.extent.size)
         
         final.addRepresentation(imageRep)

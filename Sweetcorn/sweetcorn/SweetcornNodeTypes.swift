@@ -156,7 +156,7 @@ let lumaCoefficientsNodeType = SweetcornNodeType(name: "Luma Coef",
 let piNodeType = SweetcornNodeType(name: "Pi",
     inputLabels: [],
     outputLabels: ["𝛑"],
-    glslString: "  float $VAR_NAME = \(M_PI) ; \n")
+    glslString: "  float $VAR_NAME = \(Float.pi) ; \n")
 
 // -----
 

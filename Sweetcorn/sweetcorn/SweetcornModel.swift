@@ -40,7 +40,7 @@ class SweetcornNode
         self.inputs = inputs
     }
     
-    func isAscendant(node: SweetcornNode) -> Bool
+    func isAscendant(_ node: SweetcornNode) -> Bool
     {
         for inputNode in inputs
         {
@@ -102,7 +102,7 @@ class SweetcornModel
         cmykToRGBNodeType,
         rgbToHSVNodeType,
         hsvToRGBNodeType,
-        lumaNodeType].sort({$0.name < $1.name})
+        lumaNodeType].sorted(by: {$0.name < $1.name})
     
     init()
     {
@@ -123,7 +123,7 @@ class SweetcornModel
         updateGLSL()
     }
     
-    func nodeTypeForName(name: String, mode: Mode = .Color) -> SweetcornNodeType?
+    func nodeTypeForName(_ name: String, mode: Mode = .Color) -> SweetcornNodeType?
     {
         switch name
         {
@@ -136,14 +136,14 @@ class SweetcornModel
         }
     }
     
-    func node_id(node: SweetcornNode) -> String
+    func node_id(_ node: SweetcornNode) -> String
     {
         return node.type.name == "Input" ?
             "pixel" :
-            "var_\(nodes.indexOf({$0 === node})!)"
+            "var_\(nodes.index(where: {$0 === node})!)"
     }
     
-    func deleteNode(nodeToDelete: SweetcornNode)
+    func deleteNode(_ nodeToDelete: SweetcornNode)
     {
         for node in nodes
         {
@@ -156,7 +156,7 @@ class SweetcornModel
             }
         }
         
-        nodes.removeAtIndex(nodes.indexOf({$0 === nodeToDelete})!)
+        nodes.remove(at: nodes.index(where: {$0 === nodeToDelete})!)
     }
     
     func updateGLSL()
@@ -175,30 +175,30 @@ class SweetcornModel
         switch mode
         {
         case .Color:
-            glslString = "kernel vec4 color(__sample pixel)\n{\n" + glslLines.reduce("", combine: +) + "}"
+            glslString = "kernel vec4 color(__sample pixel)\n{\n" + glslLines.reduce("", +) + "}"
         case .Warp:
-            glslString = "kernel vec2 warp()\n{\n" + glslLines.reduce("", combine: +) + "}"
+            glslString = "kernel vec2 warp()\n{\n" + glslLines.reduce("", +) + "}"
         }
         
-        let includes = Set<String>(nodes.filter({ $0.type.includeFunction != nil }).map({ $0.type.includeFunction! })).reduce("", combine: +)
+        let includes = Set<String>(nodes.filter({ $0.type.includeFunction != nil }).map({ $0.type.includeFunction! })).reduce("", +)
         
         filteringDelegate?.glslDidUpdate(includes + glslString)
     }
     
-    func generateGLSLForNode(node: SweetcornNode)
+    func generateGLSLForNode(_ node: SweetcornNode)
     {
-        let inputs = node.inputs.sort{ $0.0.targetIndex <  $1.0.targetIndex }
+        let inputs = node.inputs.sorted{ $0.0.targetIndex <  $1.0.targetIndex }
         
         var glslString = node.type.glslString
         
-        if let varNameRange = glslString.rangeOfString("$VAR_NAME")
+        if let varNameRange = glslString.range(of: "$VAR_NAME")
         {
-           glslString.replaceRange(varNameRange, with: node_id(node))
+           glslString.replaceSubrange(varNameRange, with: node_id(node))
         }
         
         if node.type.name == "Float"
         {
-            glslString.replaceRange(glslString.rangeOfString("$0")!,
+            glslString.replaceSubrange(glslString.range(of: "$0")!,
                 with: "\(node.floatValue)")
         }
         
@@ -208,18 +208,18 @@ class SweetcornModel
                 "" :
                 "." + rgba[inputs[i].0.sourceIndex]
             
-            glslString.replaceRange(glslString.rangeOfString("$\(i)")!,
+            glslString.replaceSubrange(glslString.range(of: "$\(i)")!,
                 with: node_id(inputs[i].1) + replacePostfix)
         }
         
-        if !glslString.characters.isEmpty
+        if !glslString.isEmpty
         {
             while glslLines.contains(glslString)
             {
-                glslLines.removeAtIndex(glslLines.indexOf(glslString)!)
+                glslLines.remove(at: glslLines.index(of: glslString)!)
             }
             
-            glslLines.insert(glslString, atIndex: 0)
+            glslLines.insert(glslString, at: 0)
         }
         
         for input in inputs
@@ -231,7 +231,7 @@ class SweetcornModel
     // MARK: Saving and opening...
     // TODO: Refactor these monster functions!
     
-    func newDocument(mode: Mode)
+    func newDocument(_ mode: Mode)
     {
         self.mode = mode
         
@@ -272,19 +272,19 @@ class SweetcornModel
     {
         var serializableNodes = [[String: AnyObject]]()
         
-        for (idx, node) in nodes.enumerate()
+        for (idx, node) in nodes.enumerated()
         {
             var dict = [String: AnyObject]()
 
-            dict["index"] = idx
-            dict["type"] = node.type.name
-            dict["floatValue"] = node.floatValue
-            dict["positionx"] = node.position.x
-            dict["positiony"] = node.position.y
+            dict["index"] = idx as AnyObject
+            dict["type"] = node.type.name as AnyObject
+            dict["floatValue"] = node.floatValue as AnyObject
+            dict["positionx"] = node.position.x as AnyObject
+            dict["positiony"] = node.position.y as AnyObject
             
             if node.type.name == "Output"
             {
-                dict["mode"] = mode.rawValue
+                dict["mode"] = mode.rawValue as AnyObject
             }
 
             var inputs = [[String: AnyObject]]()
@@ -293,14 +293,14 @@ class SweetcornModel
             {
                 var inputDict = [String: AnyObject]()
                 
-                inputDict["sourceIndex"] = input.0.sourceIndex
-                inputDict["targetIndex"] = input.0.targetIndex
-                inputDict["inputNodeIndex"] = nodes.indexOf({$0 === input.1})
+                inputDict["sourceIndex"] = input.0.sourceIndex as AnyObject
+                inputDict["targetIndex"] = input.0.targetIndex as AnyObject
+                inputDict["inputNodeIndex"] = nodes.index(where: {$0 === input.1}) as AnyObject
                 
                 inputs.append(inputDict)
             }
             
-            dict["inputs"] = inputs
+            dict["inputs"] = inputs as AnyObject
             
             serializableNodes.append(dict)
         }
@@ -309,10 +309,10 @@ class SweetcornModel
         
         do
         {
-            let jsonData = try NSJSONSerialization.dataWithJSONObject(serializableNodes,
-                options: NSJSONWritingOptions.PrettyPrinted)
+            let jsonData = try JSONSerialization.data(withJSONObject: serializableNodes,
+                options: JSONSerialization.WritingOptions.prettyPrinted)
             
-             jsonString = NSString(data: jsonData, encoding: NSUTF8StringEncoding)!
+             jsonString = NSString(data: jsonData, encoding: String.Encoding.utf8.rawValue)!
         }
         catch
         {
@@ -322,17 +322,16 @@ class SweetcornModel
         let savePanel = NSSavePanel()
         savePanel.allowedFileTypes = ["sweetcorn"]
         
-        savePanel.beginSheetModalForWindow(NSApplication.sharedApplication().windows.first!)
-        {
-            (result: Int) in
+        savePanel.beginSheetModal(for: NSApplication.shared.windows.first!)
+        { (result) in
         
-            if let url = savePanel.URL where result == 1
+            if let url = savePanel.url, result.rawValue == 1
             {
                 do
                 {
-                    try jsonString.writeToURL(url,
+                    try jsonString.write(to: url,
                         atomically: true,
-                        encoding: NSUTF8StringEncoding)
+                        encoding: String.Encoding.utf8.rawValue)
                 }
                 catch
                 {
@@ -347,16 +346,15 @@ class SweetcornModel
         let openPanel = NSOpenPanel()
         openPanel.allowedFileTypes = ["sweetcorn"]
         
-        openPanel.beginSheetModalForWindow(NSApplication.sharedApplication().windows.first!)
-        {
-            (result: Int) in
+        openPanel.beginSheetModal(for: NSApplication.shared.windows.first!)
+        { (result) in
             
-            if let url = openPanel.URL where result == 1
+            if let url = openPanel.url, result.rawValue == 1
             {
                 do
                 {
-                    let json = try NSString(contentsOfURL: url,
-                        encoding: NSUTF8StringEncoding)
+                    let json = try NSString(contentsOf: url,
+                        encoding: String.Encoding.utf8.rawValue)
                     
                     self.populateNodesFromJSON(json)
                 }
@@ -368,18 +366,18 @@ class SweetcornModel
         }
     }
     
-    func populateNodesFromJSON(jsonString: NSString)
+    func populateNodesFromJSON(_ jsonString: NSString)
     {
-        guard let data = jsonString.dataUsingEncoding(NSUTF8StringEncoding) else
+        guard let data = jsonString.data(using: String.Encoding.utf8.rawValue) else
         {
             return
         }
         
-        let jsonObject: AnyObject
+        let jsonObject: Any
         
         do
         {
-            jsonObject = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers)
+            jsonObject = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
         }
         catch
         {
@@ -389,22 +387,22 @@ class SweetcornModel
 
         mode = .Color
         
-        if let jsonArray = jsonObject as? NSArray
+        if let jsonArray = jsonObject as? [[String: Any]]
         {
             nodes.removeAll()
             var nodesByIndex = [Int: SweetcornNode]()
             
             for node in jsonArray
             {
-                if let modeName = node["mode"] as? String, mode = Mode(rawValue: modeName)
+                if let modeName = node["mode"] as? String, let mode = Mode(rawValue: modeName)
                 {
                     self.mode = mode
                 }
                 
                 let nodeType = nodeTypeForName(String(node["type"] as! NSString), mode: mode)!
                 let nodeFloatValue = node["floatValue"] as! Float
-                let nodePositionX = CGFloat(node["positionx"] as! NSNumber)
-                let nodePositionY = CGFloat(node["positiony"] as! NSNumber)
+                let nodePositionX = CGFloat(truncating: node["positionx"] as! NSNumber)
+                let nodePositionY = CGFloat(truncating: node["positiony"] as! NSNumber)
                 
                 let newNode = SweetcornNode(type: nodeType, position: CGPoint(x: nodePositionX, y: nodePositionY))
                 newNode.floatValue = nodeFloatValue
@@ -418,7 +416,7 @@ class SweetcornModel
             
             for node in jsonArray
             {
-                for input in node["inputs"] as! NSArray
+                for input in node["inputs"] as! [[String: Any]]
                 {
                     let inputNode = nodesByIndex[input["inputNodeIndex"] as! Int]
                     let sourceIndex = input["sourceIndex"] as! Int
@@ -444,11 +442,11 @@ enum Mode: String
 
 // -----
 
-func alert(message: String)
+func alert(_ message: String)
 {
     let alert = NSAlert()
     alert.messageText = message
-    alert.alertStyle = .WarningAlertStyle
+    alert.alertStyle = .warning
     alert.runModal()
 }
 
@@ -456,7 +454,7 @@ func alert(message: String)
 
 protocol FilteringDelegate: class
 {
-    func glslDidUpdate(glslString: String)
+    func glslDidUpdate(_ glslString: String)
 }
 
 protocol NodeInterfaceDelegate: class

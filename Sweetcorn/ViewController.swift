@@ -26,11 +26,11 @@ let model = SweetcornModel()
 
 class ViewController: NSViewController
 {
-    let scrollView = NSScrollView()
-    let canvas = Canvas(model: model, frame: CGRect(x: 0, y: 0, width: 2000, height: 2000))
+    @objc let scrollView = NSScrollView()
+    @objc let canvas = Canvas(model: model, frame: CGRect(x: 0, y: 0, width: 2000, height: 2000))
     
-    let nodeTypesList = NodeTypesList(model: model)
-    let glslViewer = GLSLViewer()
+    @objc let nodeTypesList = NodeTypesList(model: model)
+    @objc let glslViewer = GLSLViewer()
     
     override func viewDidLoad()
     {
@@ -66,7 +66,7 @@ class ViewController: NSViewController
         resizeUI(toSize: view.frame.size)
     }
     
-    func resizeUI(toSize frameSize: NSSize)
+    @objc func resizeUI(toSize frameSize: NSSize)
     {
         let tableViewWidth: CGFloat = 100
         
@@ -89,17 +89,17 @@ class ViewController: NSViewController
 
 extension ViewController // Menu Items
 {
-    func newDocument(menuItem:NSMenuItem)
+    @objc func newDocument(_ menuItem:NSMenuItem)
     {
         model.newDocument(menuItem.title == "New Color Kernel" ? .Color : .Warp)
     }
     
-    func saveDocumentAs(_:NSMenuItem)
+    @objc func saveDocumentAs(_:NSMenuItem)
     {
         model.saveDocument()
     }
     
-    func openDocument(_:NSMenuItem)
+    @objc func openDocument(_:NSMenuItem)
     {
         model.openDocument()
     }
