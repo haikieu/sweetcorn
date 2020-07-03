@@ -38,7 +38,7 @@ class Canvas: NSView, NodeInterfaceDelegate
         registerForDraggedTypes([NSPasteboard.PasteboardType(rawValue: "DraggingSweetcornNodeType")])
         
         let checkerboard = CIFilter(name: "CICheckerboardGenerator",
-            withInputParameters: [
+            parameters: [
                 "inputColor0": CIColor(red: 0, green: 0, blue: 0),
                 "inputColor1": CIColor(red: 0.05, green: 0.05, blue: 0.05),
             ])!
@@ -213,8 +213,8 @@ extension Canvas // Dropping support
 {
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation
     {
-        let draggingLocation = NSPoint(x: convert(sender.draggingLocation(), from: nil).x - 50,
-            y: convert(sender.draggingLocation(), from: nil).y - 10)
+        let draggingLocation = NSPoint(x: convert(sender.draggingLocation, from: nil).x - 50,
+            y: convert(sender.draggingLocation, from: nil).y - 10)
         
         addSubview(draggingWidget)
         draggingWidget.isHidden = false
@@ -227,8 +227,8 @@ extension Canvas // Dropping support
     
     override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation
     {
-        let draggingLocation = NSPoint(x: convert(sender.draggingLocation(), from: nil).x - 50,
-            y: convert(sender.draggingLocation(), from: nil).y - 10)
+        let draggingLocation = NSPoint(x: convert(sender.draggingLocation, from: nil).x - 50,
+            y: convert(sender.draggingLocation, from: nil).y - 10)
         
         draggingWidget.frame = CGRect(origin: draggingLocation,
             size: CGSize(width: 100, height: 20))
@@ -247,8 +247,8 @@ extension Canvas // Dropping support
         {
             let node = SweetcornNode(type: nodeType, position: CGPoint.zero)
             
-            let draggingLocation = NSPoint(x: convert(sender.draggingLocation(), from: nil).x - 50,
-                y: convert(sender.draggingLocation(), from: nil).y + 10 - NodeWidget.widgetHeightForNode(node))
+            let draggingLocation = NSPoint(x: convert(sender.draggingLocation, from: nil).x - 50,
+                y: convert(sender.draggingLocation, from: nil).y + 10 - NodeWidget.widgetHeightForNode(node))
             
             node.position = draggingLocation
             

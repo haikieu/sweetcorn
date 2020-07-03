@@ -26,7 +26,7 @@ class GLSLViewer: NSView
     @objc let codeView = NSTextField()
     @objc let textScrollView = NSScrollView()
     
-    @objc let monalisa = NSImage(named: NSImage.Name(rawValue: "monalisa.jpg"))!
+    @objc let monalisa = NSImage(named: "monalisa.jpg")!
     @objc let ciMonaLisa: CIImage
     
     @objc var glslString: String?

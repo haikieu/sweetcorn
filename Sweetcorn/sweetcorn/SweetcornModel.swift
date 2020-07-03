@@ -140,7 +140,7 @@ class SweetcornModel
     {
         return node.type.name == "Input" ?
             "pixel" :
-            "var_\(nodes.index(where: {$0 === node})!)"
+            "var_\(nodes.firstIndex(where: {$0 === node})!)"
     }
     
     func deleteNode(_ nodeToDelete: SweetcornNode)
@@ -156,7 +156,7 @@ class SweetcornModel
             }
         }
         
-        nodes.remove(at: nodes.index(where: {$0 === nodeToDelete})!)
+        nodes.remove(at: nodes.firstIndex(where: {$0 === nodeToDelete})!)
     }
     
     func updateGLSL()
@@ -216,7 +216,7 @@ class SweetcornModel
         {
             while glslLines.contains(glslString)
             {
-                glslLines.remove(at: glslLines.index(of: glslString)!)
+                glslLines.remove(at: glslLines.firstIndex(of: glslString)!)
             }
             
             glslLines.insert(glslString, at: 0)
@@ -295,7 +295,7 @@ class SweetcornModel
                 
                 inputDict["sourceIndex"] = input.0.sourceIndex as AnyObject
                 inputDict["targetIndex"] = input.0.targetIndex as AnyObject
-                inputDict["inputNodeIndex"] = nodes.index(where: {$0 === input.1}) as AnyObject
+                inputDict["inputNodeIndex"] = nodes.firstIndex(where: {$0 === input.1}) as AnyObject
                 
                 inputs.append(inputDict)
             }
@@ -470,11 +470,7 @@ struct InputIndex: Hashable, Equatable
 {
     let sourceIndex: Int
     let targetIndex: Int
-    
-    var hashValue: Int
-    {
-        return sourceIndex.hashValue + targetIndex.hashValue
-    }
+ 
 }
 
 func == (lhs: InputIndex, rhs: InputIndex) -> Bool
